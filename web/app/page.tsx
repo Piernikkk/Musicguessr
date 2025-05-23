@@ -1,5 +1,5 @@
 import LogoBanner from "@/lib/startpage/Banner";
-import { fancyBackground, fancyBackgroundBlur, homepageStyles } from "./styles";
+import { fancyBackground, fancyBackgroundBlur, fancyBackgroundBlur2, homepageStyles } from "./styles";
 import JoinCodeInput from "@/lib/startpage/JoinCodeInput";
 
 export default function Home() {
@@ -7,6 +7,7 @@ export default function Home() {
     <div className={homepageStyles}>
       <div className={fancyBackground}>
         <div className={fancyBackgroundBlur} />
+        <div className={fancyBackgroundBlur2} />
       </div>
       <LogoBanner />
       <JoinCodeInput />

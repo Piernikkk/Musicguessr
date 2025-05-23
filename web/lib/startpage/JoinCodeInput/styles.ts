@@ -4,11 +4,31 @@ export const joinCodeInputContainer = css({
     border: '1px solid',
     borderColor: 'border',
     borderRadius: '20px',
-    padding: '20px',
+    padding: '40px',
+    paddingInline: '60px',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
     gap: '50px',
-    width: '30vw',
+    width: '25vw',
+    overflow: 'hidden',
+    backgroundColor: '#00000060',
+});
+
+export const joinButtonContainer = css({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: '10px',
+    width: '100%',
+});
+
+export const inputs = css({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: '10px',
+    width: '100%',
+    flexDirection: 'column',
 })

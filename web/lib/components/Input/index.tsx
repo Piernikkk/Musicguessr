@@ -8,17 +8,18 @@ export interface InputProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLIn
     icon?: Icon;
     large?: boolean;
     ref?: React.RefObject<HTMLInputElement>;
-    radius?: boolean;
+    radius?: 15;
     width?: number | string;
+    background?: 'transparent';
 }
 
-export default function Input({ label, icon: Icon, radius, large, ref, width, ...props }: InputProps) {
+export default function Input({ label, icon: Icon, radius, large, ref, width, background, ...props }: InputProps) {
     return (
         <div style={{ width: width || '200px' }}>
             {label && <div className={inputLabel({ large })}>{label}</div>}
-            <div className={inputWrapper({ radius, Icon: !!Icon, large })}>
+            <div className={inputWrapper({ radius, Icon: !!Icon, large, background })}>
                 {Icon && <Icon size={large ? 24 : 16} color={token('colors.icon.0')} />}
-                <input ref={ref} {...props} className={inputStyle({ Icon: !!Icon, large })} />
+                <input ref={ref} {...props} className={inputStyle({ Icon: !!Icon, large, background })} />
             </div>
         </div>
     )

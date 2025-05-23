@@ -33,7 +33,7 @@ export const inputWrapper = cva({
     },
     variants: {
         radius: {
-            true: {
+            15: {
                 borderRadius: '15px',
             }
         },
@@ -45,6 +45,11 @@ export const inputWrapper = cva({
         large: {
             true: {
 
+            }
+        },
+        background: {
+            transparent: {
+                backgroundColor: 'transparent',
             }
         }
     },
@@ -71,6 +76,9 @@ export const inputStyle = cva({
         fontFamily: 'Poppins',
         width: '100%',
         height: '50px',
+        '&::placeholder': {
+            textAlign: 'center',
+        },
         // height: '60px',
         flex: 1,
         '&:active': {
@@ -90,6 +98,11 @@ export const inputStyle = cva({
                 paddingLeft: '6px',
             }
         },
+        background: {
+            transparent: {
+                backgroundColor: 'transparent',
+            }
+        }
     },
     // compoundVariants: [
     //     {
