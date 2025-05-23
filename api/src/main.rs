@@ -90,8 +90,8 @@ fn init_axum(state: AppState) -> Router {
 
 async fn init_listener() -> Result<TcpListener, std::io::Error> {
     let addr = std::env::var("BIND_ADDR").unwrap_or_else(|_| {
-        warn!("missing BIND_ADDR, defaulting to http://localhost:3000");
-        "localhost:3000".to_string()
+        warn!("missing BIND_ADDR, defaulting to http://localhost:3010");
+        "localhost:3010".to_string()
     });
 
     TcpListener::bind(addr).await

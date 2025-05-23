@@ -1,6 +1,4 @@
-use std::{fs, ops::Deref, sync::Arc};
-
-use axum::extract::FromRef;
+use std::{ops::Deref, sync::Arc};
 
 #[derive(Clone)]
 pub struct AppState(Arc<InnerState>);

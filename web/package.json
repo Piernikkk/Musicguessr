@@ -10,8 +10,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tabler/icons-react": "^3.33.0",
     "babel-plugin-react-compiler": "^19.0.0-beta-bafa41b-20250307",
-    "next": "15.2.2",
+    "next": "^15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

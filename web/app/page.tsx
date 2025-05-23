@@ -1,10 +1,15 @@
-import Text from "@/lib/components/Text";
-import { homepageStyles } from "./styles";
+import LogoBanner from "@/lib/startpage/Banner";
+import { fancyBackground, fancyBackgroundBlur, homepageStyles } from "./styles";
+import JoinCodeInput from "@/lib/startpage/JoinCodeInput";
 
 export default function Home() {
   return (
     <div className={homepageStyles}>
-      <Text size="xxl" weight={600}>Musicguessr</Text>
+      <div className={fancyBackground}>
+        <div className={fancyBackgroundBlur} />
+      </div>
+      <LogoBanner />
+      <JoinCodeInput />
     </div>
   );
 }
