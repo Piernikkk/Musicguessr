@@ -1,12 +1,16 @@
+mod error;
 mod paths;
 mod socket;
 mod state;
 
 use axum::Router;
 use color_eyre::eyre::Context;
-use paths::health::{self};
+use paths::{
+    game,
+    health::{self},
+};
 use socket::listener::init_io;
-use socketioxide::{SocketIoBuilder, extract::SocketRef, layer::SocketIoLayer};
+use socketioxide::{SocketIoBuilder, layer::SocketIoLayer};
 use tokio::net::TcpListener;
 use tracing::{info, level_filters::LevelFilter, warn};
 use tracing_error::ErrorLayer;
@@ -89,6 +93,7 @@ fn init_tracing() -> color_eyre::Result<()> {
 fn init_axum(state: AppState, io_layer: SocketIoLayer) -> Router {
     let (router, api) = OpenApiRouter::with_openapi(ApiDoc::openapi())
         .nest("/api/health", health::router(state.clone()))
+        .nest("/api/game/create", game::router(state.clone()))
         .with_state(state)
         .split_for_parts();
 

@@ -16,7 +16,7 @@ impl Deref for AppState {
         &self.0
     }
 }
-
+#[allow(dead_code)]
 pub struct InnerState {
     pub http_client: reqwest::Client,
 }

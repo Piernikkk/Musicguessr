@@ -21,7 +21,7 @@ export const fancyBackground = css({
     left: '0',
     right: '0',
     borderRadius: '2px',
-    filter: 'blur(150px) opacity(0.6)',
+    filter: 'blur(180px) opacity(0.6)',
     '@supports (-moz-appearance: none)': {
         filter: 'blur(300px) opacity(0.4)',
     }

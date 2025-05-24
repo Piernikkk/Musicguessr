@@ -11,7 +11,7 @@ export const joinCodeInputContainer = css({
     alignItems: 'center',
     flexDirection: 'column',
     gap: '50px',
-    width: '25vw',
+    width: '500px',
     overflow: 'hidden',
     backgroundColor: '#00000060',
 });
