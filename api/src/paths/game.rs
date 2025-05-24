@@ -1,10 +1,12 @@
 use axum::{Extension, Json};
+use mongodb::{bson::Bson, options::ReturnDocument, results::InsertOneResult};
 use serde::Serialize;
 use utoipa::ToSchema;
 use utoipa_axum::{router::OpenApiRouter, routes};
 
 use crate::{
     error::{AxumResult, AxumResultError},
+    models::Room,
     state::AppState,
 };
 
@@ -29,7 +31,17 @@ pub struct CreateRoomResponse {
     ),
 )]
 pub async fn create_game_room(
-    Extension(_state): Extension<AppState>,
+    Extension(state): Extension<AppState>,
 ) -> AxumResult<Json<CreateRoomResponse>> {
-    Ok(Json(CreateRoomResponse { id: 123456 }))
+    let id = 123455;
+
+    let room = state
+        .db
+        .collection::<Room>("rooms")
+        .insert_one(Room { id })
+        .await?;
+
+    dbg!(room);
+
+    Ok(Json(CreateRoomResponse { id }))
 }

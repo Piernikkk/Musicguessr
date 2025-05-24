@@ -1,5 +1,7 @@
 use std::{ops::Deref, sync::Arc};
 
+use mongodb::Database;
+
 #[derive(Clone)]
 pub struct AppState(Arc<InnerState>);
 
@@ -19,4 +21,5 @@ impl Deref for AppState {
 #[allow(dead_code)]
 pub struct InnerState {
     pub http_client: reqwest::Client,
+    pub db: Database,
 }

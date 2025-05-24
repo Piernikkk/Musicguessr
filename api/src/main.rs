@@ -1,10 +1,12 @@
 mod error;
+mod models;
 mod paths;
 mod socket;
 mod state;
 
 use axum::Router;
 use color_eyre::eyre::Context;
+use mongodb::{Client, Database};
 use paths::{
     game,
     health::{self},
@@ -40,7 +42,11 @@ async fn main() -> color_eyre::Result<()> {
 
     let http_client = init_reqwest().wrap_err("failed to initialize HTTP client")?;
 
-    let app_state = AppState::new(InnerState { http_client });
+    let db = init_mongodb()
+        .await
+        .wrap_err("failed to initialize MongoDB client")?;
+
+    let app_state = AppState::new(InnerState { http_client, db });
 
     let (layer, io) = SocketIoBuilder::new().build_layer();
 
@@ -90,6 +96,20 @@ fn init_tracing() -> color_eyre::Result<()> {
 
     Ok(())
 }
+
+async fn init_mongodb() -> color_eyre::Result<Database> {
+    let uri = std::env::var("MONGODB_URI").unwrap_or_else(|_| {
+        warn!("missing MONGODB_URI, defaulting to mongodb://localhost:27017");
+        "mongodb://localhost:27017".to_string()
+    });
+
+    let client = Client::with_uri_str(uri).await?;
+
+    let db = client.database("musicguessr");
+
+    Ok(db)
+}
+
 fn init_axum(state: AppState, io_layer: SocketIoLayer) -> Router {
     let (router, api) = OpenApiRouter::with_openapi(ApiDoc::openapi())
         .nest("/api/health", health::router(state.clone()))

@@ -3,6 +3,7 @@ import { inputs, joinButtonContainer, joinCodeInputContainer } from "./styles";
 import GlowTile from "@/lib/components/GlowTile";
 import Button from "@/lib/components/Button";
 import Text from "@/lib/components/Text";
+import Spacer from "@/lib/components/Spacer";
 
 export default function JoinCodeInput() {
     return (
@@ -13,7 +14,7 @@ export default function JoinCodeInput() {
                     <Input placeholder="Game code" background="transparent" width={'100%'} centered type="number" maxLength={6} />
                     <Button label="Join" />
                 </div>
-                <Text>OR</Text>
+                <Spacer><Text color={4} >OR</Text></Spacer>
                 <Button label="Create Lobby" width={'100%'} />
             </div>
         </GlowTile>
