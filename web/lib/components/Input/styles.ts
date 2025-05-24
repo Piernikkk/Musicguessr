@@ -76,9 +76,6 @@ export const inputStyle = cva({
         fontFamily: 'Poppins',
         width: '100%',
         height: '50px',
-        '&::placeholder': {
-            textAlign: 'center',
-        },
         // height: '60px',
         flex: 1,
         '&:active': {
@@ -86,6 +83,21 @@ export const inputStyle = cva({
         }
     },
     variants: {
+        centered: {
+            true: {
+                '&::placeholder': {
+                    textAlign: 'center',
+                },
+                textAlign: 'center',
+                '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+                    '-webkit-appearance': 'none',
+                    margin: 0,
+                },
+                '&[type=number]': {
+                    '-moz-appearance': 'textfield',
+                }
+            }
+        },
         large: {
             true: {
                 fontSize: 20,

@@ -16,7 +16,12 @@ export const buttonContainer = cva({
         '&:hover': {
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
             borderColor: 'contrast.0',
-        }
+        },
+        '&:active': {
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            borderColor: 'contrast.1',
+        },
+        userSelect: 'none',
     },
     variants: {
         contrast: {

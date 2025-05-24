@@ -7,10 +7,10 @@ import Text from "@/lib/components/Text";
 export default function JoinCodeInput() {
     return (
         <GlowTile className={joinCodeInputContainer}>
-            <Input background="transparent" placeholder="Enter your username" width={'100%'} />
+            <Input background="transparent" placeholder="Enter your username" width={'100%'} centered />
             <div className={inputs}>
                 <div className={joinButtonContainer}>
-                    <Input placeholder="Game code" background="transparent" width={'100%'} />
+                    <Input placeholder="Game code" background="transparent" width={'100%'} centered type="number" maxLength={6} />
                     <Button label="Join" />
                 </div>
                 <Text>OR</Text>
