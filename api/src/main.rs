@@ -4,6 +4,8 @@ mod paths;
 mod socket;
 mod state;
 
+use std::{collections::HashMap, sync::Arc};
+
 use axum::Router;
 use color_eyre::eyre::Context;
 use mongodb::{Client, Database};
@@ -13,7 +15,7 @@ use paths::{
 };
 use socket::listener::init_io;
 use socketioxide::{SocketIoBuilder, layer::SocketIoLayer};
-use tokio::net::TcpListener;
+use tokio::{net::TcpListener, sync::Mutex};
 use tracing::{info, level_filters::LevelFilter, warn};
 use tracing_error::ErrorLayer;
 use tracing_subscriber::{
@@ -46,7 +48,11 @@ async fn main() -> color_eyre::Result<()> {
         .await
         .wrap_err("failed to initialize MongoDB client")?;
 
-    let app_state = AppState::new(InnerState { http_client, db });
+    let app_state = AppState::new(InnerState {
+        http_client,
+        db,
+        rooms: Arc::new(Mutex::new(HashMap::new())),
+    });
 
     let (layer, io) = SocketIoBuilder::new().build_layer();
 

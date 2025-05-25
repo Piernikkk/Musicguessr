@@ -1,13 +1,11 @@
 use axum::{Extension, Json};
-use mongodb::{bson::Bson, options::ReturnDocument, results::InsertOneResult};
 use serde::Serialize;
 use utoipa::ToSchema;
 use utoipa_axum::{router::OpenApiRouter, routes};
 
 use crate::{
     error::{AxumResult, AxumResultError},
-    models::Room,
-    state::AppState,
+    state::{AppState, Room},
 };
 
 pub fn router(state: AppState) -> OpenApiRouter<AppState> {
@@ -35,11 +33,7 @@ pub async fn create_game_room(
 ) -> AxumResult<Json<CreateRoomResponse>> {
     let id = 123455;
 
-    let room = state
-        .db
-        .collection::<Room>("rooms")
-        .insert_one(Room { id })
-        .await?;
+    let room = state.rooms.lock().await.insert(id, Room { users: vec![] });
 
     dbg!(room);
 
