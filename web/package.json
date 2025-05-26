@@ -7,15 +7,19 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typegen": "openapi-typescript http://localhost:3010/apidoc/openapi.json -o ./types/api.d.ts"
   },
   "dependencies": {
     "@mantine/hooks": "^8.0.1",
     "@tabler/icons-react": "^3.33.0",
     "babel-plugin-react-compiler": "^19.0.0-beta-bafa41b-20250307",
     "next": "^15.3.2",
+    "openapi-fetch": "^0.14.0",
+    "openapi-react-query": "^0.5.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -25,6 +29,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.2.2",
-    "typescript": "^5"
+    "openapi-typescript": "^7.8.0",
+    "typescript": "^5.8.3"
   }
 }
