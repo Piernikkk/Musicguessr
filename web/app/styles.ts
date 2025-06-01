@@ -34,7 +34,7 @@ export const fancyBackgroundBlur = css({
     height: '100%',
     color: 'transparent',
     backgroundColor: 'transparent',
-})
+});
 
 export const fancyBackgroundBlur2 = css({
     backgroundColor: 'transparent',
@@ -47,4 +47,4 @@ export const fancyBackgroundBlur2 = css({
     bottom: '0',
     right: '0',
 
-})
+});

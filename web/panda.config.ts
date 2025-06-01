@@ -40,6 +40,11 @@ export default defineConfig({
             0: { value: '#121212' },
             1: { value: '#080808' },
           },
+          transparentBackground: {
+            0: { value: '#0a0a0a90' },
+            1: { value: '#0a0a0a70' },
+            2: { value: '#0a0a0a50' },
+          },
           contrast: {
             0: { value: '#ffffff' },
             1: { value: '#7d7d7d' },
