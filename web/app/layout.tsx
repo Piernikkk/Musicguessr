@@ -1,6 +1,7 @@
 import { Inter, Poppins } from 'next/font/google';
 import "./globals.css";
 import { ReactNode } from 'react';
+import { ThemeProvider } from 'next-themes'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -23,13 +24,15 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
-    <html lang="en" className={`${poppins.variable} ${inter.variable}`}>
+    <html lang="en" className={`${poppins.variable} ${inter.variable}`} suppressHydrationWarning>
       <head>
         {/* <script src="https://unpkg.com/react-scan/dist/auto.global.js"></script> */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body>
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

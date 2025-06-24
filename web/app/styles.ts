@@ -8,7 +8,7 @@ export const homepageStyles = css({
     justifyContent: 'center',
     height: '100vh',
     width: '100vw',
-    gap: '50px',
+    gap: 5,
     position: 'relative',
 });
 

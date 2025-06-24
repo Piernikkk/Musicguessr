@@ -17,16 +17,36 @@ export const text = cva({
             10: { lineClamp: 10 },
         },
         size: {
-            xxs: { fontSize: 12 },
-            xs: { fontSize: 14 },
-            sm: { fontSize: 16 },
-            md: { fontSize: 18 },
-            xd: { fontSize: 20 },
-            lg: { fontSize: 24 },
-            xl: { fontSize: 30 },
-            xxl: { fontSize: 50 },
-            xxxl: { fontSize: 70 },
-            '4xl': { fontSize: 90 },
+            xxs: {
+                fontSize: { base: 10, sm: 12 }
+            },
+            xs: {
+                fontSize: { base: 12, sm: 14 }
+            },
+            sm: {
+                fontSize: { base: 14, sm: 16 }
+            },
+            md: {
+                fontSize: { base: 16, sm: 18 }
+            },
+            xd: {
+                fontSize: { base: 18, sm: 20 }
+            },
+            lg: {
+                fontSize: { base: 20, sm: 24, md: 26 }
+            },
+            xl: {
+                fontSize: { base: 24, sm: 30, md: 32 }
+            },
+            xxl: {
+                fontSize: { base: 36, sm: 50, md: 56 }
+            },
+            xxxl: {
+                fontSize: { base: 48, sm: 70, md: 80 }
+            },
+            '4xl': {
+                fontSize: { base: 45, sm: 60, md: 75, lg: 90, }
+            },
         },
         weight: {
             100: { fontWeight: 100 },
@@ -52,6 +72,5 @@ export const text = cva({
                 WebkitTextFillColor: 'transparent'
             }
         },
-
     }
 });

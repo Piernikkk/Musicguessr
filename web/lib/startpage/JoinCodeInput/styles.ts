@@ -3,17 +3,20 @@ import { css } from "@/styled-system/css";
 export const joinCodeInputContainer = css({
     border: '1px solid',
     borderColor: 'border',
-    borderRadius: '20px',
-    padding: '50px',
+    borderRadius: "2xl",
+    padding: '3rem',
     // paddingInline: '60px',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    gap: '50px',
-    width: '500px',
+    gap: 7,
+    width: '100%',
     overflow: 'hidden',
-    backgroundColor: '#00000060',
+    backgroundColor: 'tile.0/60',
+    sm: {
+        width: '500px',
+    }
 });
 
 export const joinButtonContainer = css({

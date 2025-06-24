@@ -25,49 +25,126 @@ export default defineConfig({
   // Useful for theme customization
   theme: {
     extend: {
-      tokens: {
+      breakpoints: {
+        sm: '500px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1280px',
+        '2xl': '1536px'
+      },
+      semanticTokens: {
         colors: {
           primary: {
-            value: '#7b2eda',
-            dark: {
-              value: '#6921c2',
+            value: {
+              base: '#7b2eda',
+              _dark: '#6921c2',
             }
           },
           background: {
-            value: '#0a0a0a',
+            value: {
+              base: '#ffffff',
+              _dark: '#0a0a0a',
+            }
           },
           tile: {
-            0: { value: '#121212' },
-            1: { value: '#080808' },
+            0: {
+              value: {
+                base: '#ededed',
+                _dark: '#121212'
+              }
+            },
+            1: {
+              value: {
+                base: '#e9ecef',
+                _dark: '#080808'
+              }
+            },
           },
           transparentBackground: {
-            0: { value: '#0a0a0a90' },
-            1: { value: '#0a0a0a70' },
-            2: { value: '#0a0a0a50' },
+            0: {
+              value: {
+                base: '#ffffff90',
+                _dark: '#0a0a0a90'
+              }
+            },
+            1: {
+              value: {
+                base: '#ffffff70',
+                _dark: '#0a0a0a70'
+              }
+            },
+            2: {
+              value: {
+                base: '#ffffff50',
+                _dark: '#0a0a0a50'
+              }
+            },
           },
           contrast: {
-            0: { value: '#ffffff' },
-            1: { value: '#7d7d7d' },
+            0: {
+              value: {
+                base: '#000000',
+                _dark: '#ffffff'
+              }
+            },
+            1: {
+              value: {
+                base: '#495057',
+                _dark: '#7d7d7d'
+              }
+            },
           },
           text: {
-            0: { value: '#E9ECEF' },
-            1: { value: '#A1A1AA' },
-            2: { value: '#898989' },
-            3: { value: '#7A7A7A' },
-            4: { value: '#000000' },
+            0: {
+              value: {
+                base: '#212529',
+                _dark: '#E9ECEF'
+              }
+            },
+            1: {
+              value: {
+                base: '#495057',
+                _dark: '#A1A1AA'
+              }
+            },
+            2: {
+              value: {
+                base: '#6c757d',
+                _dark: '#898989'
+              }
+            },
+            3: {
+              value: {
+                base: '#adb5bd',
+                _dark: '#7A7A7A'
+              }
+            },
+            4: {
+              value: {
+                base: '#ffffff',
+                _dark: '#000000'
+              }
+            },
           },
           border: {
-            value: '#ffffff50',
-          },
-          websiteBorder: {
-            value: '#ffffff10',
-            1: {
-              value: '#ffffff15',
+            value: {
+              base: '#00000070',
+              _dark: '#ffffff50',
             }
           },
           icon: {
-            0: { value: '#ffffff' },
-            1: { value: '#7d7d7d' },
+            0: {
+              value: {
+                base: '#000000',
+                _dark: '#ffffff'
+              }
+            },
+            1: {
+              value: {
+                base: '#495057',
+                _dark: '#7d7d7d'
+              }
+            },
           },
           violet: {
             0: { value: '#f7ecff' },
@@ -193,6 +270,13 @@ export default defineConfig({
           },
         },
       },
+    },
+  },
+
+  conditions: {
+    extend: {
+      dark: '.dark &, [data-theme="dark"] &',
+      light: '.light &, [data-theme="light"] &',
     },
   },
 
