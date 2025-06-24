@@ -1,12 +1,23 @@
+'use client';
+import React from "react";
 import Text from "@/lib/components/Text";
 import { userBarContainer, userBarHeader, userBarList } from "./styles";
-import UserTile from "../UserTile";
 import Spacer from "@/lib/components/Spacer";
 import { css } from "@/styled-system/css";
 import { IconMusicQuestion } from "@tabler/icons-react";
 import Link from "next/link";
+import CodeTile from "../CodeTile";
+import { useParams } from "next/navigation";
+import { useAtomValue } from "jotai";
+import { gameAtom } from "@/lib/atoms/game";
+import UserTile from "../UserTile";
 
 export default function UserBar() {
+    const params = useParams();
+    const gameId = params.gameid ? parseInt(params.gameid as string) : undefined
+
+    const game = useAtomValue(gameAtom);
+
     return (
         <div className={userBarContainer}>
             <Link href={'/'} >
@@ -18,12 +29,14 @@ export default function UserBar() {
                 </div>
             </Link>
             <Spacer />
-            <div className={userBarList}>
-                <div className={css({ display: "flex", justifyContent: 'center', alignItems: "center", width: "100%" })}>
+            <div className={css({ display: "flex", flex: 1, minHeight: 0, justifyContent: 'space-between', alignItems: "center", width: "100%", flexDirection: 'column', gap: 1 })}>
+                <div className={css({ display: "flex", justifyContent: 'center', alignItems: "center", maxWidth: "100%" })}>
                     <Text weight={600} size="md">Players:</Text>
                 </div>
-                <UserTile />
-                <UserTile />
+                <div className={userBarList}>
+                    {game?.users?.map((user, i) => <UserTile key={i} id={user.id} username={user.name} />)}
+                </div>
+                {gameId && <CodeTile code={gameId} />}
             </div>
         </div>
     )

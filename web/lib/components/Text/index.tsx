@@ -6,7 +6,7 @@ export interface TextProps extends TextVariants {
     children: React.ReactNode,
 }
 
-export default function Text({ size, weight, color, lineClamp, children }: TextProps) {
+export default function Text({ size = 'sm', weight, color, lineClamp, children }: TextProps) {
     return <div className={text({ size, weight, color, lineClamp })}>{children}</div>
 
 }

@@ -25,7 +25,8 @@ export const userBarList = css({
     display: "flex",
     flexDirection: "column",
     width: "100%",
-    height: "100%",
+    flex: 1,
+    minHeight: 0,
     gap: 2,
     overflowY: "auto",
 })

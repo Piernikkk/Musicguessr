@@ -37,7 +37,7 @@ pub async fn create_game_room(
         random = rand::random();
     }
 
-    let room = state
+    state
         .rooms
         .lock()
         .await

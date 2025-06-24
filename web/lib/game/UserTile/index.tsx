@@ -1,10 +1,15 @@
 import Text from "@/lib/components/Text";
 import { userTileContainer } from "./styles";
 
-export default function UserTile() {
+interface UserTileProps {
+    username?: string;
+    id: string;
+}
+
+export default function UserTile({ username }: UserTileProps) {
     return (
         <div className={userTileContainer}>
-            <Text>User</Text>
+            <Text>{username}</Text>
         </div>
     )
 }

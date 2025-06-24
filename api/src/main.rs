@@ -28,7 +28,7 @@ use utoipa_redoc::{Redoc, Servable as _};
 use utoipa_scalar::{Scalar, Servable as _};
 use utoipa_swagger_ui::SwaggerUi;
 
-use crate::state::{AppState, InnerState};
+use crate::state::AppState;
 
 #[derive(OpenApi)]
 #[openapi()]
@@ -48,15 +48,17 @@ async fn main() -> color_eyre::Result<()> {
         .await
         .wrap_err("failed to initialize MongoDB client")?;
 
-    let app_state = AppState::new(InnerState {
+    let app_state = AppState {
         http_client,
         db,
         rooms: Arc::new(Mutex::new(HashMap::new())),
-    });
+    };
 
-    let (layer, io) = SocketIoBuilder::new().build_layer();
-
+    let (layer, io) = SocketIoBuilder::new()
+        .with_state(app_state.clone())
+        .build_layer();
     let app = init_axum(app_state.clone(), layer);
+
     let listener = init_listener()
         .await
         .wrap_err("failed to bind to address")?;
@@ -74,11 +76,7 @@ async fn main() -> color_eyre::Result<()> {
                 .await
                 .wrap_err("failed to run server")
         },
-        async {
-            init_io(io, app_state.clone())
-                .await
-                .wrap_err("Failed to create watcher")
-        }
+        async { init_io(io).await.wrap_err("Failed to create watcher") }
     );
     Ok(())
 }

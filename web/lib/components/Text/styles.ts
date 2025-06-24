@@ -4,7 +4,7 @@ export const text = cva({
     base: {
         fontWeight: 500,
         color: 'text.0',
-        fontSize: 18,
+        fontSize: { base: 14, sm: 16, lg: 18 },
         overflow: 'hidden',
         lineClamp: 'unset',
         transition: 'color 0.2s ease-in-out, fontWeight 0.2s ease-in-out, fontSize 0.2s ease-in-out',
@@ -24,7 +24,7 @@ export const text = cva({
                 fontSize: { base: 12, sm: 14 }
             },
             sm: {
-                fontSize: { base: 14, sm: 16 }
+                fontSize: { base: 14, sm: 16, md: 18, lg: 20 }
             },
             md: {
                 fontSize: { base: 16, sm: 18, md: 20, lg: 22 }
@@ -65,12 +65,6 @@ export const text = cva({
             3: { color: 'text.2' },
             4: { color: 'text.3' },
             5: { color: 'text.4' },
-            agin: {
-                background: 'linear-gradient(5deg, rgb(163, 99, 240) 0%, rgb(85, 14, 143) 100%)',
-                backgroundClip: 'text',
-                color: 'transparent',
-                WebkitTextFillColor: 'transparent'
-            }
         },
     }
 });

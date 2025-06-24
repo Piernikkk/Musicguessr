@@ -17,8 +17,9 @@ export const playersBarContainer = css({
     // border: '1px solid',
     // borderColor: 'border',
     height: '100%',
+    maxHeight: '100%',
     width: '20vw',
-    minWidth: '150px',
+    minWidth: 'fit-content',
     maxWidth: '300px',
 });
 export const chatBarContainer = css({
