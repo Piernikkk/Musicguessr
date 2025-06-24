@@ -63,6 +63,7 @@ dependencies = [
  "color-eyre",
  "dotenvy",
  "mongodb",
+ "rand 0.9.1",
  "reqwest",
  "serde",
  "serde_json",

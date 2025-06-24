@@ -2,6 +2,7 @@ import { Inter, Poppins } from 'next/font/google';
 import "./globals.css";
 import { ReactNode } from 'react';
 import { ThemeProvider } from 'next-themes'
+import Query from '@/lib/providers/Query';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -31,7 +32,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <ThemeProvider>
-          {children}
+          <Query>
+            {children}
+
+          </Query>
         </ThemeProvider>
       </body>
     </html>

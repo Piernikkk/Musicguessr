@@ -14,6 +14,9 @@ importers:
       '@tabler/icons-react':
         specifier: ^3.33.0
         version: 3.34.0(react@19.1.0)
+      '@tanstack/react-query':
+        specifier: ^5.81.2
+        version: 5.81.2(react@19.1.0)
       babel-plugin-react-compiler:
         specifier: ^19.0.0-beta-bafa41b-20250307
         version: 19.0.0-beta-ebf51a3-20250411

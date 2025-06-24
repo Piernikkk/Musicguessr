@@ -7,6 +7,8 @@ import Text from "@/lib/components/Text";
 import Spacer from "@/lib/components/Spacer";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { $api } from "@/lib/providers/api";
+
 
 export default function JoinCodeInput() {
     const [code, setCode] = useState<string | null>();
@@ -18,8 +20,21 @@ export default function JoinCodeInput() {
             return;
         };
 
+
         router.push(`/game/${code}/lobby`);
 
+    }
+
+    const createGameMutation = $api.useMutation('post', '/api/game');
+
+    async function handleCreateLobby() {
+        const result = await createGameMutation.mutateAsync({}).catch((error) => {
+            alert(`Something went wrong: ${error.message}`);
+        });
+
+        if (result) {
+            router.push(`/game/${result.id}/lobby`);
+        }
     }
 
     return (
@@ -31,7 +46,7 @@ export default function JoinCodeInput() {
                     <Button onClick={handleJoin} label="Join" />
                 </div>
                 <Spacer><Text color={4} >OR</Text></Spacer>
-                <Button label="Create Lobby" width={'100%'} />
+                <Button onClick={handleCreateLobby} label="Create Lobby" width={'100%'} />
             </div>
         </GlowTile>
     )

@@ -16,6 +16,16 @@ export const userBarContainer = css({
 export const userBarHeader = css({
     display: "flex",
     alignItems: "center",
+    gap: 1,
     justifyContent: "center",
     padding: "5px",
 });
+
+export const userBarList = css({
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+    height: "100%",
+    gap: 2,
+    overflowY: "auto",
+})

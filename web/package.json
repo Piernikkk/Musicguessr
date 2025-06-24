@@ -13,6 +13,7 @@
   "dependencies": {
     "@mantine/hooks": "^8.0.1",
     "@tabler/icons-react": "^3.33.0",
+    "@tanstack/react-query": "^5.81.2",
     "babel-plugin-react-compiler": "^19.0.0-beta-bafa41b-20250307",
     "next": "^15.3.2",
     "next-themes": "^0.4.6",

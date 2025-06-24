@@ -27,13 +27,13 @@ export const text = cva({
                 fontSize: { base: 14, sm: 16 }
             },
             md: {
-                fontSize: { base: 16, sm: 18 }
+                fontSize: { base: 16, sm: 18, md: 20, lg: 22 }
             },
             xd: {
-                fontSize: { base: 18, sm: 20 }
+                fontSize: { base: 18, sm: 20, md: 24, lg: 26 }
             },
             lg: {
-                fontSize: { base: 20, sm: 24, md: 26 }
+                fontSize: { base: 20, sm: 24, md: 26, lg: 28 }
             },
             xl: {
                 fontSize: { base: 24, sm: 30, md: 32 }

@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/api/game/create": {
+    "/api/game": {
         parameters: {
             query?: never;
             header?: never;

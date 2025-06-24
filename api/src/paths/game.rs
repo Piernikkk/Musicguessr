@@ -31,11 +31,19 @@ pub struct CreateRoomResponse {
 pub async fn create_game_room(
     Extension(state): Extension<AppState>,
 ) -> AxumResult<Json<CreateRoomResponse>> {
-    let id = 123455;
+    let mut random = rand::random_range(0..999999);
 
-    let room = state.rooms.lock().await.insert(id, Room { users: vec![] });
+    while state.rooms.lock().await.contains_key(&random) {
+        random = rand::random();
+    }
 
-    dbg!(room);
+    let room = state
+        .rooms
+        .lock()
+        .await
+        .insert(random, Room { users: vec![] });
 
-    Ok(Json(CreateRoomResponse { id }))
+    dbg!(state.rooms.lock().await.len());
+
+    Ok(Json(CreateRoomResponse { id: random }))
 }

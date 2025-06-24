@@ -119,7 +119,7 @@ async fn init_mongodb() -> color_eyre::Result<Database> {
 fn init_axum(state: AppState, io_layer: SocketIoLayer) -> Router {
     let (router, api) = OpenApiRouter::with_openapi(ApiDoc::openapi())
         .nest("/api/health", health::router(state.clone()))
-        .nest("/api/game/create", game::router(state.clone()))
+        .nest("/api/game", game::router(state.clone()))
         .with_state(state)
         .split_for_parts();
 
@@ -136,8 +136,8 @@ fn init_axum(state: AppState, io_layer: SocketIoLayer) -> Router {
 
 async fn init_listener() -> Result<TcpListener, std::io::Error> {
     let addr = std::env::var("BIND_ADDR").unwrap_or_else(|_| {
-        warn!("missing BIND_ADDR, defaulting to http://localhost:3000");
-        "localhost:3000".to_string()
+        warn!("missing BIND_ADDR, defaulting to http://localhost:3002");
+        "localhost:3002".to_string()
     });
 
     TcpListener::bind(addr).await

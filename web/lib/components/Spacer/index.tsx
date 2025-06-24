@@ -8,8 +8,10 @@ export default function Spacer({ children }: SpacerProps) {
     return (
         <div className={spacerContainer}>
             <div className={divider} />
-            {children}
-            <div className={divider} />
+            {children && <>
+                {children}
+                < div className={divider} />
+            </>}
         </div>
     )
 }
