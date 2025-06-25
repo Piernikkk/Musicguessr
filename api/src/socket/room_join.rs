@@ -79,7 +79,9 @@ pub async fn room_join_handler(
 pub async fn room_disconnect(s: SocketRef, _io: SocketIo, State(state): State<AppState>) {
     let room_id = state.players.lock().await.remove_entry(&s.id.to_string());
 
+    s.leave_all();
     dbg!(s.rooms());
+
     let mut rooms = state.rooms.lock().await;
     if let Some((_, room_code)) = room_id {
         if let Some(room) = rooms.get_mut(&room_code) {
