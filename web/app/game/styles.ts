@@ -24,8 +24,8 @@ export const playersBarContainer = css({
 });
 export const chatBarContainer = css({
     display: "flex",
-    border: '1px solid',
-    borderColor: 'border',
+    // border: '1px solid',
+    // borderColor: 'border',
     height: '100%',
     width: '25vw',
     minWidth: '300px',

@@ -66,17 +66,15 @@ export const inputWrapper = cva({
 
 export const inputStyle = cva({
     base: {
-        fontSize: 16,
+        fontSize: 'md',
         color: 'text.0',
         outline: 'none',
         border: 'none',
         backgroundColor: 'tile.1',
-        padding: '12px 16px',
-        // paddingLeft: Icon ? large ? 10 : 6 : undefined,
+        paddingInline: 4,
         fontFamily: 'Poppins',
         width: '100%',
         height: '50px',
-        // height: '60px',
         flex: 1,
         '&:active': {
             outline: 'none',

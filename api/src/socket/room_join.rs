@@ -1,7 +1,4 @@
-use crate::{
-    models::User,
-    state::{AppState, Room},
-};
+use crate::{models::User, state::AppState};
 use serde::{Deserialize, Serialize};
 use socketioxide::{
     SocketIo,
