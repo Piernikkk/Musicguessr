@@ -7,7 +7,7 @@ use socketioxide::{
 
 use tracing::{info, warn};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct JoinData {
     code: u32,
     username: String,
@@ -15,46 +15,69 @@ pub struct JoinData {
 
 pub async fn room_join_handler(
     s: SocketRef,
+    io: SocketIo,
     Data(data): Data<JoinData>,
     State(state): State<AppState>,
 ) {
-    if state.rooms.lock().await.contains_key(&data.code) {
-        let room_code = data.code.to_string();
-        s.join(room_code.clone());
+    let mut rooms = state.rooms.lock().await;
+    let room = rooms.get_mut(&data.code);
 
-        let user = User {
-            id: s.id.to_string(),
-            name: data.username,
-        };
+    match room {
+        Some(room) => {
+            s.join(data.code.to_string());
 
-        let emit = s.to(room_code.clone()).emit("joined", &user).await;
-
-        match emit {
-            Ok(_) => info!("User {} joined room {}", user.name, data.code),
-            Err(e) => {
-                info!("Failed to emit 'joined' event: {}", e);
-                let _ = s.emit("error", "Failed to join room");
-            }
-        }
-        let mut room = {
-            let rooms = state.rooms.lock().await;
-            let Some(room) = rooms.get(&data.code) else {
-                let _ = s.emit("error", "Room not found");
-                return;
+            let user = User {
+                id: s.id.to_string(),
+                name: data.username,
             };
-            room.clone()
-        };
 
-        room.users.push(user);
+            room.users.push(user.clone());
 
-        state.rooms.lock().await.insert(data.code, room);
-    } else {
-        let _ = s.emit("error", &format!("{} is not a valid room code", data.code));
-        warn!("Attempted to join invalid room code: {}", data.code);
+            state
+                .players
+                .lock()
+                .await
+                .insert(s.id.to_string(), data.code);
+
+            let room_clone = room.clone();
+            drop(rooms);
+
+            let _ = io
+                .to(data.code.to_string())
+                .emit("joined", &room_clone)
+                .await;
+            info!("User {} joined room {}", user.name, data.code);
+        }
+        None => {
+            drop(rooms);
+            let _ = s.emit("error", &format!("{} is not a valid room code", data.code));
+            warn!("Attempted to join invalid room code: {}", data.code);
+        }
     }
 }
 
-pub async fn room_disconnect(s: SocketRef, _io: SocketIo) {
-    info!("{} disconnected", s.id);
-    let _ = s.to(s.rooms()).emit("disconnected", &s.id).await;
+pub async fn room_disconnect(s: SocketRef, _io: SocketIo, State(state): State<AppState>) {
+    let room_id = state.players.lock().await.remove_entry(&s.id.to_string());
+
+    dbg!(s.rooms());
+    let mut rooms = state.rooms.lock().await;
+    if let Some((_, room_code)) = room_id {
+        if let Some(room) = rooms.get_mut(&room_code) {
+            room.users.retain(|user| user.id != s.id.to_string());
+            if room.users.is_empty() {
+                rooms.remove(&room_code);
+                info!("Room {} has been removed as it is empty", room_code);
+            } else {
+                let _ = s.to(s.rooms()).emit("disconnected", &s.id).await;
+                info!("User {} left room {}", s.id, room_code);
+            }
+        } else {
+            warn!(
+                "Room {} not found when disconnecting user {}",
+                room_code, s.id
+            );
+        }
+    } else {
+        warn!("User {} was not in any room when disconnecting", s.id);
+    }
 }

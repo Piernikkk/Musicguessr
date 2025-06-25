@@ -6,10 +6,10 @@ interface UserTileProps {
     id: string;
 }
 
-export default function UserTile({ username }: UserTileProps) {
+export default function UserTile({ id }: UserTileProps) {
     return (
         <div className={userTileContainer}>
-            <Text>{username}</Text>
+            <Text>{id}</Text>
         </div>
     )
 }

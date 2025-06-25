@@ -52,6 +52,7 @@ async fn main() -> color_eyre::Result<()> {
         http_client,
         db,
         rooms: Arc::new(Mutex::new(HashMap::new())),
+        players: Arc::new(Mutex::new(HashMap::new())),
     };
 
     let (layer, io) = SocketIoBuilder::new()

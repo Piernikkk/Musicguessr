@@ -1,4 +1,4 @@
-use std::{collections::HashMap, ops::Deref, sync::Arc};
+use std::{collections::HashMap, sync::Arc};
 
 use mongodb::Database;
 use serde::{Deserialize, Serialize};
@@ -11,6 +11,7 @@ pub struct AppState {
     pub http_client: reqwest::Client,
     pub db: Database,
     pub rooms: Arc<Mutex<HashMap<u32, Room>>>,
+    pub players: Arc<Mutex<HashMap<String, u32>>>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
