@@ -24,6 +24,12 @@ pub async fn room_join_handler(
 
     match room {
         Some(room) => {
+            if room.users.iter().any(|user| user.id == s.id.to_string()) {
+                let _ = s.emit("error", "You are already in this room");
+                warn!("User {} is already in this room", s.id);
+                return;
+            }
+
             s.join(data.code.to_string());
 
             let user = User {
@@ -46,7 +52,7 @@ pub async fn room_join_handler(
                 .to(data.code.to_string())
                 .emit("joined", &room_clone)
                 .await;
-            info!("User {} joined room {}", user.name, data.code);
+            info!("User {} joined room {}", user.id, data.code);
         }
         None => {
             drop(rooms);
