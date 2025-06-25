@@ -9,6 +9,8 @@ pub async fn init_io(io: SocketIo) -> Result<()> {
 
         s.on("join", room_join_handler);
 
+        s.on("leave", room_disconnect);
+
         s.on_disconnect(room_disconnect);
     });
 

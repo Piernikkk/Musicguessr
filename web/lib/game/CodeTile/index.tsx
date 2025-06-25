@@ -13,7 +13,7 @@ export default function CodeTile({ code }: CodeTileProps) {
 
     return (
         <div className={codeTileContainer} onClick={() => {
-            navigator.clipboard.writeText(code.toString());
+            navigator.clipboard.writeText(code.toString().padStart(6, '0'));
             setAnimate(true);
             setTimeout(() => setAnimate(false), 1500);
         }}>
@@ -25,7 +25,7 @@ export default function CodeTile({ code }: CodeTileProps) {
                 :
                 <>
                     <Text>Game code:</Text>
-                    <Text weight={600}>{code}</Text>
+                    <Text weight={600}>{code.toString().padStart(6, '0')}</Text>
                     <IconCopy />
                 </>
             }

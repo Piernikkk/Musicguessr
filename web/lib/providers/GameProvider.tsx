@@ -1,21 +1,21 @@
 import { useEffect } from "react";
 import { useSocket } from "../hooks/useSocket";
-import { useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import { Game, gameAtom } from "../atoms/game";
 
 export default function GameProvider({ children, gameId, }: { children: React.ReactNode, gameId?: number }) {
     const socket = useSocket();
-    const setGame = useSetAtom(gameAtom);
+    const [game, setGame] = useAtom(gameAtom);
 
     useEffect(() => {
         if (!socket || !gameId) return;
 
-        if (socket.connected) {
-            socket.emit('join', { code: gameId, username: 'Placeholder' });
-        }
+        // if (!game?.id) {
+        //     console.log('Connecting to game with ID:', gameId);
+        //     socket.emit('join', { code: gameId, username: 'Placeholder' });
+        // }
 
         socket.on('connect', () => {
-
             console.log('Connecting to game with ID:', gameId);
             socket.emit('join', { code: gameId, username: 'Placeholder' });
         });
@@ -38,7 +38,7 @@ export default function GameProvider({ children, gameId, }: { children: React.Re
             socket.off('connect');
             socket.off('disconnected');
         }
-    }, [socket, gameId, setGame]);
+    }, [socket, gameId, game?.id, setGame]);
 
     return children;
 }

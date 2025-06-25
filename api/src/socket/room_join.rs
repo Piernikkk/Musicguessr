@@ -1,4 +1,7 @@
-use crate::{models::User, state::AppState};
+use crate::{
+    models::User,
+    state::{AppState, Room},
+};
 use serde::{Deserialize, Serialize};
 use socketioxide::{
     SocketIo,
@@ -11,6 +14,12 @@ use tracing::{info, warn};
 pub struct JoinData {
     code: u32,
     username: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct GameUpdate {
+    id: u32,
+    users: Vec<User>,
 }
 
 pub async fn room_join_handler(
@@ -44,13 +53,18 @@ pub async fn room_join_handler(
                 .lock()
                 .await
                 .insert(s.id.to_string(), data.code);
+            //
 
-            let room_clone = room.clone();
+            // let room_clone = room.clone();
+            let room_update = GameUpdate {
+                id: data.code,
+                users: room.users.clone(),
+            };
             drop(rooms);
 
             let _ = io
                 .to(data.code.to_string())
-                .emit("joined", &room_clone)
+                .emit("joined", &room_update)
                 .await;
             info!("User {} joined room {}", user.id, data.code);
         }

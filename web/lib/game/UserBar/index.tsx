@@ -11,6 +11,7 @@ import { useParams } from "next/navigation";
 import { useAtomValue } from "jotai";
 import { gameAtom } from "@/lib/atoms/game";
 import UserTile from "../UserTile";
+import { useSocket } from "@/lib/hooks/useSocket";
 
 export default function UserBar() {
     const params = useParams();
@@ -18,9 +19,16 @@ export default function UserBar() {
 
     const game = useAtomValue(gameAtom);
 
+    const socket = useSocket();
+
     return (
         <div className={userBarContainer}>
-            <Link href={'/'} >
+            <Link href={'/'} onClick={() => {
+                if (gameId) {
+                    // Emit a leave event if the user is in a game
+                    socket?.emit('leave');
+                }
+            }} >
                 <div className={userBarHeader}>
                     <Text size="xd" weight={600}>Musicguessr</Text>
                     <IconMusicQuestion className={css({

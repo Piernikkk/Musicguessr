@@ -3,6 +3,7 @@ import "./globals.css";
 import { ReactNode } from 'react';
 import { ThemeProvider } from 'next-themes'
 import Query from '@/lib/providers/Query';
+import SocketProvider from '@/lib/providers/Socket';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -33,8 +34,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <ThemeProvider>
           <Query>
-            {children}
-
+            <SocketProvider>
+              {children}
+            </SocketProvider>
           </Query>
         </ThemeProvider>
       </body>
