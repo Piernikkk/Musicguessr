@@ -5,25 +5,30 @@ import GlowTile from '@/lib/components/GlowTile';
 import Button from '@/lib/components/Button';
 import Text from '@/lib/components/Text';
 import Spacer from '@/lib/components/Spacer';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { $api } from '@/lib/providers/api';
 import { useSocket } from '@/lib/hooks/useSocket';
 import { TGame, gameAtom } from '@/lib/atoms/game';
-import { useAtom, useSetAtom } from 'jotai';
-import { userAtom } from '@/lib/atoms/user';
+import { useSetAtom } from 'jotai';
+import { UserState } from '@/types/user';
+import { useLocalStorage, useStartTyping } from 'react-use';
 
 export default function JoinCodeInput() {
     const [code, setCode] = useState<string>('');
 
-    const [user, setUser] = useAtom(userAtom);
+    const [value, setValue] = useLocalStorage<UserState>('username');
+
+    const ref = useRef<HTMLInputElement>(null);
+
+    useStartTyping(() => ref.current?.focus());
 
     const router = useRouter();
     const socket = useSocket();
     const setGame = useSetAtom(gameAtom);
 
     function Join(code: number) {
-        if (!user?.username) {
+        if (!value?.username) {
             alert('Please enter a username before joining a game.');
             return;
         }
@@ -33,7 +38,7 @@ export default function JoinCodeInput() {
             return;
         }
 
-        socket.emit('join', { code: code, username: user.username });
+        socket.emit('join', { code: code, username: value.username });
     }
 
     function handleJoin() {
@@ -78,12 +83,12 @@ export default function JoinCodeInput() {
         <GlowTile className={joinCodeInputContainer}>
             <Input
                 background="transparent"
-                value={user?.username || ''}
+                value={value?.username || ''}
                 placeholder="Enter your username"
                 width={'100%'}
                 centered
                 onChange={(e) =>
-                    setUser((u) => ({ ...(u || {}), username: e.currentTarget.value }))
+                    setValue((u) => ({ ...(u || {}), username: e.currentTarget.value }))
                 }
             />
             <div className={inputs}>
@@ -97,6 +102,7 @@ export default function JoinCodeInput() {
                         centered
                         type="number"
                         maxLength={6}
+                        ref={ref}
                     />
                     <Button onClick={handleJoin} label="Join" />
                 </div>
