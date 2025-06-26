@@ -1,16 +1,18 @@
 import { useEffect } from 'react';
 import { chatBarContainer, messagesWrapper } from './style';
-import Input from '@/lib/components/Input';
 import { useSocket } from '@/lib/hooks/useSocket';
 import { useAtom } from 'jotai';
 import { gameAtom, TMessage } from '@/lib/atoms/game';
 import Message from '../Message';
-import { getHotkeyHandler } from '@mantine/hooks';
+import { useRef } from 'react';
+import MessageInput from '../MessageInput';
 
 export default function ChatBar() {
     const socket = useSocket();
 
     const [game, setGame] = useAtom(gameAtom);
+
+    const ref = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (!socket) return;
@@ -31,10 +33,12 @@ export default function ChatBar() {
         };
     }, [socket]);
 
-    function sendMessage(content: string) {
-        if (!socket) return;
+    function sendMessage() {
+        if (!socket || !ref.current?.value) return;
 
-        socket.emit('message', { content: content });
+        socket.emit('message', { content: ref.current.value });
+
+        ref.current.value = '';
     }
 
     return (
@@ -59,19 +63,12 @@ export default function ChatBar() {
                     </Message>
                 ))}
             </div>
-            <Input
+            <MessageInput
                 background="transparent"
-                onKeyDown={getHotkeyHandler([
-                    [
-                        'Enter',
-                        (e) => {
-                            e.preventDefault();
-                            sendMessage(e.target.value);
-                        },
-                    ],
-                ])}
+                onSend={sendMessage}
                 width={'100%'}
                 placeholder="Type your message here"
+                ref={ref}
             />
         </div>
     );

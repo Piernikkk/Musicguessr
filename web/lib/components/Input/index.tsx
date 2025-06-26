@@ -8,7 +8,6 @@ export interface InputProps
     label?: string;
     icon?: Icon;
     large?: boolean;
-    ref?: React.RefObject<HTMLInputElement>;
     radius?: 15;
     width?: number | string;
     background?: 'transparent';
@@ -20,7 +19,6 @@ export default function Input({
     icon: Icon,
     radius,
     large,
-    ref,
     width,
     background,
     centered,
@@ -32,7 +30,6 @@ export default function Input({
             <div className={inputWrapper({ radius, Icon: !!Icon, large, background })}>
                 {Icon && <Icon size={large ? 24 : 16} color={token('colors.icon.0')} />}
                 <input
-                    ref={ref}
                     {...props}
                     className={inputStyle({ Icon: !!Icon, large, background, centered })}
                 />

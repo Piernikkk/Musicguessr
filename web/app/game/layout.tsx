@@ -11,7 +11,7 @@ import {
 } from './styles';
 import GameProvider from '@/lib/providers/GameProvider';
 import { useParams } from 'next/navigation';
-import ChatBar from '@/lib/game/ChatBar';
+import ChatBar from '@/lib/game/chat/ChatBar';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const params = useParams();
