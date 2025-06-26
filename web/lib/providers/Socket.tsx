@@ -1,7 +1,6 @@
-'use client'
-import { createContext, ReactNode, useEffect, useState } from "react";
+'use client';
+import { createContext, ReactNode, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
-
 
 export const SocketContext = createContext<Socket | undefined>(undefined);
 
@@ -12,14 +11,15 @@ export default function SocketProvider({ children }: { children: ReactNode }) {
         const socket = io();
         setSocket(socket);
 
+        socket.on('disconnect', () => {
+            console.log('Socket disconnected');
+            socket.connect();
+        });
+
         return () => {
             socket.disconnect();
-        }
+        };
     }, []);
 
-    return (
-        <SocketContext.Provider value={socket}>
-            {children}
-        </SocketContext.Provider>
-    )
+    return <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>;
 }
