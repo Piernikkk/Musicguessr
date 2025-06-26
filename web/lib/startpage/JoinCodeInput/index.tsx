@@ -6,7 +6,7 @@ import Button from '@/lib/components/Button';
 import Text from '@/lib/components/Text';
 import Spacer from '@/lib/components/Spacer';
 import { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { $api } from '@/lib/providers/api';
 import { useSocket } from '@/lib/hooks/useSocket';
 import { TGame, gameAtom } from '@/lib/atoms/game';
@@ -17,7 +17,19 @@ import { useLocalStorage, useStartTyping } from 'react-use';
 export default function JoinCodeInput() {
     const [code, setCode] = useState<string>('');
 
-    const [value, setValue] = useLocalStorage<UserState>('username');
+    const [value, setValue] = useLocalStorage<UserState>('user');
+
+    const serchParams = useSearchParams();
+
+    useEffect(() => {
+        if (!serchParams) return;
+
+        const codeParam = serchParams.get('code');
+
+        if (!codeParam) return;
+
+        setCode(codeParam);
+    }, []);
 
     const ref = useRef<HTMLInputElement>(null);
 
