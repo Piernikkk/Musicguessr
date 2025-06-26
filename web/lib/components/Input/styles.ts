@@ -23,7 +23,7 @@ export const inputWrapper = cva({
         overflow: 'hidden',
         alignItems: 'center',
         gap: '5px',
-        borderRadius: '10px',
+        borderRadius: 'xl',
         // paddingLeft: Icon ? large ? 20 : 16 : undefined,
         width: '100%',
         '&:focus-within': {

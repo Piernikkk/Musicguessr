@@ -23,6 +23,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-textarea-autosize": "^8.5.9",
+    "react-use": "^17.6.0",
     "socket.io-client": "^4.8.1"
   },
   "devDependencies": {

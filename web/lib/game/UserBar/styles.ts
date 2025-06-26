@@ -5,10 +5,10 @@ export const userBarContainer = css({
     flexDirection: "column",
     width: "100%",
     height: "100%",
-    padding: "15px",
+    padding: 3,
     border: "1px solid",
     borderColor: "border",
-    borderRadius: "15px",
+    borderRadius: 'xl',
     backgroundColor: "transparentBackground.1",
     gap: "10px",
 });

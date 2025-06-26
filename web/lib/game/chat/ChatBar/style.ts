@@ -21,4 +21,14 @@ export const messagesWrapper = css({
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
+});
+
+export const chatBarHeader = css({
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 3,
+    paddingBottom: 2,
 })

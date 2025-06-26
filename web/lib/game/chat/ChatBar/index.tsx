@@ -1,11 +1,14 @@
 import { useEffect } from 'react';
-import { chatBarContainer, messagesWrapper } from './style';
+import { chatBarContainer, chatBarHeader, messagesWrapper } from './style';
 import { useSocket } from '@/lib/hooks/useSocket';
 import { useAtom } from 'jotai';
 import { gameAtom, TMessage } from '@/lib/atoms/game';
 import Message from '../Message';
 import { useRef } from 'react';
 import MessageInput from '../MessageInput';
+import { useStartTyping } from 'react-use';
+import Text from '@/lib/components/Text';
+import Spacer from '@/lib/components/Spacer';
 
 export default function ChatBar() {
     const socket = useSocket();
@@ -13,6 +16,8 @@ export default function ChatBar() {
     const [game, setGame] = useAtom(gameAtom);
 
     const ref = useRef<HTMLInputElement>(null);
+
+    useStartTyping(() => ref.current?.focus());
 
     useEffect(() => {
         if (!socket) return;
@@ -44,6 +49,13 @@ export default function ChatBar() {
     return (
         <div className={chatBarContainer}>
             <div className={messagesWrapper}>
+                <div className={chatBarHeader}>
+                    <Text size="xd" weight={600}>
+                        Chat
+                    </Text>
+
+                    <Spacer />
+                </div>
                 {game?.messages?.map((message, index) => (
                     <Message
                         key={index}
