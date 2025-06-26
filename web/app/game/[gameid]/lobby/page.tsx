@@ -1,9 +1,25 @@
+'use client';
+import Text from '@/lib/components/Text';
+import { lobbyContainer } from './styles';
+import Transform from '@/lib/components/Transform';
+
 export default function Lobby() {
     return (
-        <div>
-            <h1>Lobby</h1>
-            <p>Welcome to the game lobby!</p>
-            <p>Here you can chat with other players and prepare for the game.</p>
+        <div className={lobbyContainer}>
+            <Transform
+                onClick={() => {
+                    navigator.clipboard.writeText(window.location.href);
+                }}
+                hoverChildren={
+                    <Text size="lg" weight={600}>
+                        Click to copy link!
+                    </Text>
+                }
+            >
+                <Text size="lg" weight={600}>
+                    Invite others!
+                </Text>
+            </Transform>
         </div>
     );
 }

@@ -32,8 +32,8 @@ export const chatBarContainer = css({
 });
 export const gameContainer = css({
     display: "flex",
-    border: '1px solid',
-    borderColor: 'border',
+    // border: '1px solid',
+    // borderColor: 'border',
     height: '100%',
     flex: 1,
 });
