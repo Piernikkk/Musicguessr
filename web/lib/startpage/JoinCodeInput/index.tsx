@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { $api } from '@/lib/providers/api';
 import { useSocket } from '@/lib/hooks/useSocket';
-import { Game, gameAtom } from '@/lib/atoms/game';
+import { TGame, gameAtom } from '@/lib/atoms/game';
 import { useAtom, useSetAtom } from 'jotai';
 import { userAtom } from '@/lib/atoms/user';
 
@@ -47,7 +47,7 @@ export default function JoinCodeInput() {
 
     useEffect(() => {
         if (!socket) return;
-        socket.on('joined', (data: Game) => {
+        socket.on('joined', (data: TGame) => {
             setGame(data);
             router.push(`/game/${data.id}/lobby`);
         });

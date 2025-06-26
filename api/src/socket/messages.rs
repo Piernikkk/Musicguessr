@@ -43,7 +43,7 @@ pub async fn message_handler(
             timestamp: UtcDateTime::now(),
         };
 
-        let _ = s.to(s.rooms()).emit("message", &message).await;
+        let _ = io.to(s.rooms()).emit("message", &message).await;
 
         room.messages.push(message);
     } else {

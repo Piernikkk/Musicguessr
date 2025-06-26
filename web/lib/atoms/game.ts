@@ -1,21 +1,21 @@
 import { atom } from "jotai";
 
-export const gameAtom = atom<Game>();
+export const gameAtom = atom<TGame>();
 
 export interface User {
     id: string;
     name: string;
 }
 
-export interface Message {
-    user_id: number;
+export interface TMessage {
+    user_id: string;
     username: string;
     content: string;
-    timestamp: Date;
+    timestamp: [number, number, number, number, number, number];
 }
 
-export interface Game {
+export interface TGame {
     id: number;
     users?: User[];
-    messages?: Message[];
+    messages?: TMessage[];
 };

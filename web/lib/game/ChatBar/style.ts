@@ -16,3 +16,9 @@ export const chatBarContainer = css({
     justifyContent: 'space-between',
     alignItems: 'center',
 });
+
+export const messagesWrapper = css({
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+})

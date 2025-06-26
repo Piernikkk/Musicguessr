@@ -10,8 +10,10 @@ interface MessageProps {
 export default function Message({ username, children }: MessageProps) {
     return (
         <div className={messageContainer}>
-            <Text weight={600}>{username}</Text>
-            <Text>{children}</Text>
+            <Text size="xxs" weight={600}>
+                {username}:
+            </Text>
+            <Text size="xxs">{children}</Text>
         </div>
     );
 }
