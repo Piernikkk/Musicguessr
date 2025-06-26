@@ -1,4 +1,7 @@
-use crate::{models::User, state::AppState};
+use crate::{
+    models::{Message, User},
+    state::AppState,
+};
 use serde::{Deserialize, Serialize};
 use socketioxide::{
     SocketIo,
@@ -17,6 +20,7 @@ pub struct JoinData {
 pub struct GameUpdate {
     id: u32,
     users: Vec<User>,
+    messages: Vec<Message>,
 }
 
 pub async fn room_join_handler(
@@ -56,6 +60,7 @@ pub async fn room_join_handler(
             let room_update = GameUpdate {
                 id: data.code,
                 users: room.users.clone(),
+                messages: room.messages.clone(),
             };
             drop(rooms);
 

@@ -5,7 +5,8 @@ use utoipa_axum::{router::OpenApiRouter, routes};
 
 use crate::{
     error::{AxumResult, AxumResultError},
-    state::{AppState, Room},
+    models::Room,
+    state::AppState,
 };
 
 pub fn router(state: AppState) -> OpenApiRouter<AppState> {
@@ -37,11 +38,13 @@ pub async fn create_game_room(
         random = rand::random();
     }
 
-    state
-        .rooms
-        .lock()
-        .await
-        .insert(random, Room { users: vec![] });
+    state.rooms.lock().await.insert(
+        random,
+        Room {
+            users: vec![],
+            messages: vec![],
+        },
+    );
 
     dbg!(state.rooms.lock().await.len());
 

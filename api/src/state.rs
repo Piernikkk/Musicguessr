@@ -1,10 +1,9 @@
 use std::{collections::HashMap, sync::Arc};
 
 use mongodb::Database;
-use serde::{Deserialize, Serialize};
 use tokio::sync::Mutex;
 
-use crate::models::User;
+use crate::models::Room;
 
 #[derive(Clone)]
 pub struct AppState {
@@ -12,9 +11,4 @@ pub struct AppState {
     pub db: Database,
     pub rooms: Arc<Mutex<HashMap<u32, Room>>>,
     pub players: Arc<Mutex<HashMap<String, u32>>>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Room {
-    pub users: Vec<User>,
 }
