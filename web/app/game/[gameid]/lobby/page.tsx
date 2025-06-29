@@ -4,6 +4,7 @@ import { lobbyContainer } from './styles';
 import Transform from '@/lib/components/Transform';
 import { useAtomValue } from 'jotai';
 import { gameAtom } from '@/lib/atoms/game';
+import SongIndicator from '@/lib/game/lobby/SongIndicator';
 
 export default function Lobby() {
     const game = useAtomValue(gameAtom);
@@ -24,6 +25,7 @@ export default function Lobby() {
                     Invite others!
                 </Text>
             </Transform>
+            <SongIndicator />
         </div>
     );
 }
