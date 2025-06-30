@@ -1,4 +1,4 @@
-import { css, cva } from "@/styled-system/css";
+import { css, cva } from '@/styled-system/css';
 
 export const modalBackground = cva({
     base: {
@@ -11,9 +11,8 @@ export const modalBackground = cva({
         right: 0,
         left: 0,
         opacity: 0,
-        // visibility: 'hidden',
         zIndex: 100,
-        backgroundColor: '#000000cc',
+        backgroundColor: '#0000008a',
         transition: 'all 0.2s ease-in-out',
     },
     variants: {
@@ -22,32 +21,33 @@ export const modalBackground = cva({
             100: { zIndex: 100 },
             101: { zIndex: 101 },
             102: { zIndex: 102 },
-        }
-    }
+        },
+    },
 });
 
 export const modalContainer = cva({
     base: {
         position: 'relative',
-        // padding: '30px 30px 10px 30px',
         overflow: 'hidden',
         backgroundColor: 'tile.1',
         zIndex: 101,
         border: '1px solid',
         borderRadius: '20px',
         borderColor: 'border',
-        width: '800px',
         maxHeight: '90%',
         overflowY: 'auto',
+        width: 'auto',
         display: 'flex',
         flexDirection: 'column',
-        // visibility: 'hidden',
         transform: 'scale(0.9)',
         opacity: 0,
         transition: 'all 0.2s ease-in-out',
+        md: {
+            width: '800px',
+        },
     },
     variants: {
-        opened: { true: { opacity: 1, transform: 'unset' } },
+        opened: { true: { opacity: 1, transform: 'scale(1)' } },
         width: {
             500: { width: '500px' },
             600: { width: '600px' },
@@ -55,8 +55,8 @@ export const modalContainer = cva({
             800: { width: '800px' },
             '90%': { width: '90%' },
             undefined: { width: 'unset', maxWidth: '55%' },
-        }
-    }
+        },
+    },
 });
 
 export const modalHeader = cva({
@@ -67,6 +67,7 @@ export const modalHeader = cva({
         left: 0,
         right: 0,
         display: 'flex',
+        gap: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -75,17 +76,16 @@ export const modalHeader = cva({
         staticHeader: {
             true: {
                 position: 'static',
-            }
-        }
-    }
-
-})
+            },
+        },
+    },
+});
 
 export const modalTitle = css({
     display: 'flex',
     gap: '15px',
-    alignItems: 'center'
-})
+    alignItems: 'center',
+});
 
 export const modalImageBackground = css({
     // position: 'absolute',
@@ -108,5 +108,4 @@ export const modalTitleBackground = css({
     left: 0,
     right: 0,
     height: '200px',
-
 });

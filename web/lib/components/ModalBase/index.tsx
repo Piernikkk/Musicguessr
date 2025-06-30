@@ -14,6 +14,7 @@ export type ModalBaseProps = {
     width?: 500 | 600 | 700 | 800 | '90%' | 'undefined';
     staticHeader?: boolean;
     color?: string;
+    description?: string;
 };
 
 export default function ModalBase({
@@ -24,6 +25,7 @@ export default function ModalBase({
     width,
     icon: Icon,
     title,
+    description,
     staticHeader,
 }: ModalBaseProps) {
     return (
@@ -37,6 +39,9 @@ export default function ModalBase({
                         <div className={modalTitle}>
                             {Icon && <Icon size={30} />}
                             <Text size={'lg'}>{title}</Text>
+                            <Text size={'sm'} weight={400} color={2}>
+                                {description}
+                            </Text>
                         </div>
                         {/* TODO:change to button */}
                         <IconX
