@@ -3,6 +3,7 @@ import { css, cva } from '@/styled-system/css';
 export const imageButtonContainer = css({
     position: 'relative',
     textDecoration: 'none',
+    cursor: 'pointer',
 });
 
 export const imageHover = cva({

@@ -1,4 +1,4 @@
-import { css } from "@/styled-system/css";
+import { css } from '@/styled-system/css';
 
 export const songIndicatorContainer = css({
     display: 'flex',
@@ -16,4 +16,17 @@ export const songIndicatorWrapper = css({
     width: '100%',
     gap: 1,
     alignItems: 'start',
+});
+export const songDetailsContainer = css({
+    display: 'flex',
+    padding: 2,
+    borderRadius: 'xl',
+    gap: 4,
+    flex: 1,
+});
+
+export const songDescription = css({
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
 });

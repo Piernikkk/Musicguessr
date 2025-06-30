@@ -1,18 +1,41 @@
 import Button from '@/lib/components/Button';
-import { songIndicatorContainer, songIndicatorWrapper } from './styles';
+import {
+    songDescription,
+    songDetailsContainer,
+    songIndicatorContainer,
+    songIndicatorWrapper,
+} from './styles';
 import Text from '@/lib/components/Text';
 import { css } from '@/styled-system/css';
 import { useModals } from '@/lib/ModalsManager';
+import SongPlayer from '../SongPlayer';
+import { useAtomValue } from 'jotai';
+import { songAtom } from '@/lib/atoms/song';
 
 export default function SongIndicator() {
     const modals = useModals();
 
+    const song = useAtomValue(songAtom);
+
     return (
         <div className={songIndicatorWrapper}>
             <Text size="sm" weight={600} className={css({ paddingLeft: 1 })}>
-                Current Song
+                Selected song
             </Text>
             <div className={songIndicatorContainer}>
+                {song && (
+                    <div className={songDetailsContainer}>
+                        <SongPlayer artwork={song.artworkUrl60} preview={song.previewUrl} />
+                        <div className={songDescription}>
+                            <Text size="sm" weight={600}>
+                                {song.trackName}
+                            </Text>
+                            <Text size="xs" weight={400} color={2}>
+                                {song.artistName} • {new Date(song.releaseDate).getFullYear()}
+                            </Text>
+                        </div>
+                    </div>
+                )}
                 <Button
                     label={'Change Song'}
                     onClick={() => {

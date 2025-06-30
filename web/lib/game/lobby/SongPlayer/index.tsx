@@ -19,7 +19,8 @@ export default function SongPlayer({ artwork, preview }: SongPlayerProps) {
     return (
         <div
             className={imageButtonContainer}
-            onClick={() => {
+            onClick={(e) => {
+                e.stopPropagation();
                 audio.switch(preview);
             }}
         >

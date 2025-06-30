@@ -2,6 +2,8 @@ import { TSong } from '@/types/song';
 import { rightSection, songDescription, songDetailsContainer, songTileContainer } from './styles';
 import Text from '@/lib/components/Text';
 import SongPlayer from '../lobby/SongPlayer';
+import { useSetAtom } from 'jotai';
+import { songAtom } from '@/lib/atoms/song';
 
 interface SongTileProps {
     size: 'sm' | 'lg';
@@ -9,8 +11,15 @@ interface SongTileProps {
 }
 
 export default function SongTile({ song }: SongTileProps) {
+    const setCurrentSong = useSetAtom(songAtom);
+
     return (
-        <div className={songTileContainer}>
+        <div
+            className={songTileContainer}
+            onClick={() => {
+                setCurrentSong(song);
+            }}
+        >
             <div className={songDetailsContainer}>
                 <SongPlayer artwork={song.artworkUrl60} preview={song.previewUrl} />
                 <div className={songDescription}>
