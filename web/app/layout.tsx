@@ -5,6 +5,7 @@ import { ThemeProvider } from 'next-themes';
 import Query from '@/lib/providers/Query';
 import SocketProvider from '@/lib/providers/Socket';
 import { ModalsManagerProvider } from '@/lib/ModalsManager';
+import AudioProvider from '@/lib/providers/AudioProvider';
 
 const poppins = Poppins({
     subsets: ['latin'],
@@ -39,7 +40,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 <ThemeProvider>
                     <Query>
                         <SocketProvider>
-                            <ModalsManagerProvider>{children}</ModalsManagerProvider>
+                            <AudioProvider>
+                                <ModalsManagerProvider>{children}</ModalsManagerProvider>
+                            </AudioProvider>
                         </SocketProvider>
                     </Query>
                 </ThemeProvider>

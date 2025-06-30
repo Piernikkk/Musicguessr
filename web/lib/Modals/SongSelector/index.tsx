@@ -7,11 +7,15 @@ import { useEffect, useRef } from 'react';
 import { results } from './tmp';
 import SongTile from '@/lib/game/SongTIle';
 import { TSong } from '@/types/song';
+import { useAudio } from '@/lib/hooks/useAudio';
 
 export function SongSelectorModal({
+    onClose,
     ...props
 }: React.ComponentProps<typeof ModalBase> & ModalProps<'SongSelector'>) {
     const ref = useRef<HTMLInputElement>(null);
+
+    const audio = useAudio();
 
     useEffect(() => {
         ref.current?.focus();
@@ -24,6 +28,10 @@ export function SongSelectorModal({
             icon={IconVinyl}
             description="Click on the song image to play"
             staticHeader
+            onClose={() => {
+                onClose();
+                audio.pause();
+            }}
         >
             <div className={songSelectorContainer}>
                 <Input ref={ref} placeholder="Search a song" width={'100%'} icon={IconSearch} />

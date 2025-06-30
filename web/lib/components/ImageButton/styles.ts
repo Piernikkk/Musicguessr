@@ -2,6 +2,7 @@ import { css } from '@/styled-system/css';
 
 export const imageButtonContainer = css({
     position: 'relative',
+    textDecoration: 'none',
 });
 
 export const imageHover = css({

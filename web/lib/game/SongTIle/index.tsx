@@ -1,8 +1,7 @@
 import { TSong } from '@/types/song';
 import { rightSection, songDescription, songDetailsContainer, songTileContainer } from './styles';
 import Text from '@/lib/components/Text';
-import ImageButton from '@/lib/components/ImageButton';
-import { IconPlayerPlay } from '@tabler/icons-react';
+import SongPlayer from '../lobby/SongPlayer';
 
 interface SongTileProps {
     size: 'sm' | 'lg';
@@ -13,13 +12,7 @@ export default function SongTile({ song }: SongTileProps) {
     return (
         <div className={songTileContainer}>
             <div className={songDetailsContainer}>
-                <ImageButton
-                    icon={IconPlayerPlay}
-                    src={song.artworkUrl60}
-                    alt={song.trackName}
-                    width={60}
-                    height={60}
-                />
+                <SongPlayer artwork={song.artworkUrl60} preview={song.previewUrl} />
                 <div className={songDescription}>
                     <Text size="sm" weight={600}>
                         {song.trackName}
