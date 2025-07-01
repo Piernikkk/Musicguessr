@@ -14,3 +14,13 @@ export const lobbyContainer = css({
     backgroundColor: 'transparentBackground.1',
     gap: '10px',
 });
+
+export const gameControlsContainer = css({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    flex: 1,
+    gap: '10px',
+});

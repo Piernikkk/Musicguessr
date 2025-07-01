@@ -39,6 +39,10 @@ export default function GameProvider({
             socket.emit('join', { code: gameId, username: user.username });
         });
 
+        socket.on('wrong_room', () => {
+            router.push('/');
+        });
+
         socket.on('joined', (data: TGame) => {
             if (!data) return;
             console.log('Joined game:', data);

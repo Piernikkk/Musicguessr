@@ -14,3 +14,11 @@ export const songsTiles = css({
     gap: 2,
     overflowY: 'auto',
 });
+
+export const loadingIndicator = css({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    padding: 4,
+});

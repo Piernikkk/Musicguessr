@@ -73,6 +73,7 @@ pub async fn room_join_handler(
         None => {
             drop(rooms);
             let _ = s.emit("error", &format!("{} is not a valid room code", data.code));
+            let _ = s.emit("wrong_room", &format!("{} is not a valid room code", data.code));
             warn!("Attempted to join invalid room code: {}", data.code);
         }
     }

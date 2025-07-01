@@ -1,6 +1,6 @@
 'use client';
 import Text from '@/lib/components/Text';
-import { lobbyContainer } from './styles';
+import { gameControlsContainer, lobbyContainer } from './styles';
 import Transform from '@/lib/components/Transform';
 import { useAtomValue } from 'jotai';
 import { gameAtom } from '@/lib/atoms/game';
@@ -11,20 +11,24 @@ export default function Lobby() {
 
     return (
         <div className={lobbyContainer}>
-            <Transform
-                onClick={() => {
-                    navigator.clipboard.writeText(window.location.origin + '/?code=' + game?.id);
-                }}
-                hoverChildren={
+            <div className={gameControlsContainer}>
+                <Transform
+                    onClick={() => {
+                        navigator.clipboard.writeText(
+                            window.location.origin + '/?code=' + game?.id
+                        );
+                    }}
+                    hoverChildren={
+                        <Text size="lg" weight={600}>
+                            Click to copy link!
+                        </Text>
+                    }
+                >
                     <Text size="lg" weight={600}>
-                        Click to copy link!
+                        Invite others!
                     </Text>
-                }
-            >
-                <Text size="lg" weight={600}>
-                    Invite others!
-                </Text>
-            </Transform>
+                </Transform>
+            </div>
             <SongIndicator />
         </div>
     );

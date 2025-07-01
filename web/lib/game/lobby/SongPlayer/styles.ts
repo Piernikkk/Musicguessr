@@ -4,6 +4,10 @@ export const imageButtonContainer = css({
     position: 'relative',
     textDecoration: 'none',
     cursor: 'pointer',
+    width: '60px',
+    minWidth: '60px',
+    height: '60px',
+    minHeight: '60px',
 });
 
 export const imageHover = cva({

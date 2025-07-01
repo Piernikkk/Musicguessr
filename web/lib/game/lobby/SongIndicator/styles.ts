@@ -23,6 +23,7 @@ export const songDetailsContainer = css({
     borderRadius: 'xl',
     gap: 4,
     flex: 1,
+    alignItems: 'center',
 });
 
 export const songDescription = css({
