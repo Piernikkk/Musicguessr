@@ -3,13 +3,13 @@ import { ModalProps } from '@/lib/ModalsManager';
 import { songSelectorContainer, songsTiles } from './styles';
 import { IconSearch, IconVinyl } from '@tabler/icons-react';
 import Input from '@/lib/components/Input';
-import { useEffect, useRef } from 'react';
-import { results } from './tmp';
+import { useEffect, useRef, useState } from 'react';
 import SongTile from '@/lib/game/SongTIle';
 import { TSong } from '@/types/song';
 import { useAudio } from '@/lib/hooks/useAudio';
 import { useSetAtom } from 'jotai';
 import { songAtom } from '@/lib/atoms/song';
+import { $itunes } from '@/lib/providers/itunes';
 
 export function SongSelectorModal({
     onClose,
@@ -25,6 +25,36 @@ export function SongSelectorModal({
         ref.current?.focus();
     }, []);
 
+    const [results, setResults] = useState<TSong[]>([]);
+
+    const [serchValue, setSearchValue] = useState('');
+
+    const itunes = $itunes.useMutation('get', '/search');
+
+    async function search(term: string) {
+        const res = await itunes
+            .mutateAsync({
+                params: {
+                    query: {
+                        term,
+                        media: 'music',
+                        entity: 'song',
+                    },
+                },
+            })
+            .catch((e) => console.error(e));
+
+        if (res) {
+            setResults(res.results);
+        }
+    }
+
+    useEffect(() => {
+        if (serchValue.length > 0) {
+            search(serchValue);
+        }
+    }, [serchValue]);
+
     return (
         <ModalBase
             {...props}
@@ -38,9 +68,15 @@ export function SongSelectorModal({
             }}
         >
             <div className={songSelectorContainer}>
-                <Input ref={ref} placeholder="Search a song" width={'100%'} icon={IconSearch} />
+                <Input
+                    ref={ref}
+                    placeholder="Search a song"
+                    width={'100%'}
+                    icon={IconSearch}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                />
                 <div className={songsTiles}>
-                    {results.results.map((song) => (
+                    {results.map((song) => (
                         <SongTile
                             key={song.trackId}
                             song={song as TSong}
