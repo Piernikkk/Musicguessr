@@ -45,6 +45,7 @@ pub async fn room_join_handler(
             let user = User {
                 id: s.id.to_string(),
                 name: data.username,
+                song_id: None, 
             };
 
             room.users.push(user.clone());

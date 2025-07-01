@@ -5,6 +5,7 @@ use time::UtcDateTime;
 pub struct User {
     pub id: String,
     pub name: String,
+    pub song_id: Option<u32>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

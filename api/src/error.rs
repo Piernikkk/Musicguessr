@@ -27,5 +27,5 @@ pub type AxumResult<T, E = AxumError> = std::result::Result<T, E>;
 
 #[derive(ToSchema, Serialize)]
 pub struct AxumResultError {
-    error: String,
+    pub error: String,
 }

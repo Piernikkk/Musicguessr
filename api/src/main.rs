@@ -3,6 +3,7 @@ mod models;
 mod paths;
 mod socket;
 mod state;
+mod checks;
 
 use std::{collections::HashMap, sync::Arc};
 
@@ -28,7 +29,7 @@ use utoipa_redoc::{Redoc, Servable as _};
 use utoipa_scalar::{Scalar, Servable as _};
 use utoipa_swagger_ui::SwaggerUi;
 
-use crate::state::AppState;
+use crate::{ state::AppState};
 
 #[derive(OpenApi)]
 #[openapi()]

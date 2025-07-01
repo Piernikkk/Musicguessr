@@ -3,7 +3,7 @@ use socketioxide::{SocketIo, extract::SocketRef};
 
 use crate::socket::{
     messages::message_handler,
-    rooms::{room_disconnect, room_join_handler},
+    rooms::{room_disconnect, room_join_handler}, song::song_select,
 };
 
 pub async fn init_io(io: SocketIo) -> Result<()> {
@@ -15,6 +15,8 @@ pub async fn init_io(io: SocketIo) -> Result<()> {
         s.on("leave", room_disconnect);
 
         s.on("message", message_handler);
+
+        s.on("song_select", song_select);
 
         s.on_disconnect(room_disconnect);
     });
