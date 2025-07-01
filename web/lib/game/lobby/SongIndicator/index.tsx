@@ -1,5 +1,6 @@
 import Button from '@/lib/components/Button';
 import {
+    noSong,
     songDescription,
     songDetailsContainer,
     songIndicatorContainer,
@@ -23,7 +24,7 @@ export default function SongIndicator() {
                 Selected song
             </Text>
             <div className={songIndicatorContainer}>
-                {song && (
+                {song ? (
                     <div className={songDetailsContainer}>
                         <SongPlayer artwork={song.artworkUrl60} preview={song.previewUrl} />
                         <div className={songDescription}>
@@ -34,6 +35,12 @@ export default function SongIndicator() {
                                 {song.artistName} • {new Date(song.releaseDate).getFullYear()}
                             </Text>
                         </div>
+                    </div>
+                ) : (
+                    <div className={noSong}>
+                        <Text size="sm" weight={400} color={2}>
+                            No song selected
+                        </Text>
                     </div>
                 )}
                 <Button

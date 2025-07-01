@@ -2,24 +2,17 @@ import { TSong } from '@/types/song';
 import { rightSection, songDescription, songDetailsContainer, songTileContainer } from './styles';
 import Text from '@/lib/components/Text';
 import SongPlayer from '../lobby/SongPlayer';
-import { useSetAtom } from 'jotai';
-import { songAtom } from '@/lib/atoms/song';
+import { MouseEvent } from 'react';
 
 interface SongTileProps {
     size: 'sm' | 'lg';
     song: TSong;
+    onClick?: (event: MouseEvent<HTMLDivElement, globalThis.MouseEvent>, song: TSong) => void;
 }
 
-export default function SongTile({ song }: SongTileProps) {
-    const setCurrentSong = useSetAtom(songAtom);
-
+export default function SongTile({ song, onClick }: SongTileProps) {
     return (
-        <div
-            className={songTileContainer}
-            onClick={() => {
-                setCurrentSong(song);
-            }}
-        >
+        <div className={songTileContainer} onClick={(e) => onClick?.(e, song)}>
             <div className={songDetailsContainer}>
                 <SongPlayer artwork={song.artworkUrl60} preview={song.previewUrl} />
                 <div className={songDescription}>

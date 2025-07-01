@@ -8,12 +8,16 @@ import { results } from './tmp';
 import SongTile from '@/lib/game/SongTIle';
 import { TSong } from '@/types/song';
 import { useAudio } from '@/lib/hooks/useAudio';
+import { useSetAtom } from 'jotai';
+import { songAtom } from '@/lib/atoms/song';
 
 export function SongSelectorModal({
     onClose,
     ...props
 }: React.ComponentProps<typeof ModalBase> & ModalProps<'SongSelector'>) {
     const ref = useRef<HTMLInputElement>(null);
+
+    const setCurrentSong = useSetAtom(songAtom);
 
     const audio = useAudio();
 
@@ -37,7 +41,16 @@ export function SongSelectorModal({
                 <Input ref={ref} placeholder="Search a song" width={'100%'} icon={IconSearch} />
                 <div className={songsTiles}>
                     {results.results.map((song) => (
-                        <SongTile key={song.trackId} song={song as TSong} size="sm" />
+                        <SongTile
+                            key={song.trackId}
+                            song={song as TSong}
+                            size="sm"
+                            onClick={(e, song) => {
+                                setCurrentSong(song);
+                                audio.pause();
+                                onClose();
+                            }}
+                        />
                     ))}
                 </div>
             </div>

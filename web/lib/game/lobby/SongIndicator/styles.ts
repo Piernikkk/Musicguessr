@@ -30,3 +30,10 @@ export const songDescription = css({
     flexDirection: 'column',
     justifyContent: 'center',
 });
+
+export const noSong = css({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+});
