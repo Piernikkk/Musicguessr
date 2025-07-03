@@ -11,11 +11,6 @@ export default function SocketProvider({ children }: { children: ReactNode }) {
         const socket = io();
         setSocket(socket);
 
-        socket.on('disconnect', () => {
-            console.log('Socket disconnected');
-            socket.connect();
-        });
-
         return () => {
             socket.disconnect();
         };

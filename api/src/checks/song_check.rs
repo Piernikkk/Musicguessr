@@ -32,27 +32,22 @@ struct ItunesResponse {
 
 #[derive(Deserialize, Debug, Clone, Serialize)]
 struct SearchParams {
-    term: String,
-    media: String,
-    entity: String,
-    limit: u32,
+    id: u32,
 }
 
 pub async fn fetch_from_itunes(song_id: u32, state: AppState) -> Result<()> {
-    let params = SearchParams {
-        term: song_id.to_string(),
-        media: "music".to_string(),
-        entity: "song".to_string(),
-        limit: 1,
-    };
+    dbg!("fetch_from_itunes called with song_id: {}", song_id);
+    let params = SearchParams { id: song_id };
 
     let itunes_result = state
         .http_client
-        .get("https://itunes.apple.com/search")
+        .get("https://itunes.apple.com/lookup")
         .query(&params)
         .send()
         .await
         .wrap_err("Failed to fetch song data");
+
+    dbg!(&itunes_result);
 
     match itunes_result {
         Ok(response) => {
@@ -111,6 +106,8 @@ pub async fn check_song(song_id: u32, state: AppState) -> Result<()> {
         .find_one(doc! { "track_id": song_id })
         .await
         .wrap_err("Failed to find song in database")?;
+
+    dbg!(&song);
 
     if song.is_some() {
         Ok(())

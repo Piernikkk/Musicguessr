@@ -6,7 +6,7 @@ use socketioxide::{
 
 use crate::{checks::song_check::check_song, state::AppState};
 
-use tracing::error;
+use tracing::{error, info};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct SongData {
@@ -19,12 +19,22 @@ pub async fn song_select(
     Data(data): Data<SongData>,
     State(state): State<AppState>,
 ) {
-    if check_song(data.id, state.clone()).await.is_err() {
+    let check = check_song(726416473, state.clone()).await;
+
+    if let Err(check) = check {
         s.emit("song_error", "Song not found or invalid");
+        error!("{:?}", check);
         return;
     };
 
     let mut rooms = state.rooms.lock().await;
+
+    if s.rooms().is_empty() {
+        error!("User {} is not in any room", s.id);
+        s.emit("error", "You are not in any room");
+        return;
+    }
+
     let room = rooms.get_mut(
         &s.rooms()[0]
             .parse::<u32>()
@@ -49,4 +59,6 @@ pub async fn song_select(
             error!("Room not found for song selection");
         }
     }
+
+    info!("User {} selected song ID {}", s.id, data.id);
 }

@@ -11,11 +11,14 @@ import { useSetAtom } from 'jotai';
 import { songAtom } from '@/lib/atoms/song';
 import { $itunes } from '@/lib/providers/itunes';
 import Text from '@/lib/components/Text';
+import { useSocket } from '@/lib/hooks/useSocket';
 
 export function SongSelectorModal({
     onClose,
     ...props
 }: React.ComponentProps<typeof ModalBase> & ModalProps<'SongSelector'>) {
+    const socket = useSocket();
+
     const ref = useRef<HTMLInputElement>(null);
 
     const setCurrentSong = useSetAtom(songAtom);
@@ -33,6 +36,13 @@ export function SongSelectorModal({
     const itunes = $itunes.useMutation('get', '/search');
 
     const [loading, setLoading] = useState(false);
+
+    function selectionHandler(song: TSong) {
+        setCurrentSong(song);
+        socket?.emit('song_select', { id: song.trackId });
+        audio.pause();
+        onClose();
+    }
 
     useEffect(() => {
         if (itunes.isPending) {
@@ -119,9 +129,7 @@ export function SongSelectorModal({
                                 song={song as TSong}
                                 size="sm"
                                 onClick={(e, song) => {
-                                    setCurrentSong(song);
-                                    audio.pause();
-                                    onClose();
+                                    selectionHandler(song);
                                 }}
                             />
                         ))
