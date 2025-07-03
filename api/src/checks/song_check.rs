@@ -36,7 +36,6 @@ struct SearchParams {
 }
 
 pub async fn fetch_from_itunes(song_id: u32, state: AppState) -> Result<()> {
-    dbg!("fetch_from_itunes called with song_id: {}", song_id);
     let params = SearchParams { id: song_id };
 
     let itunes_result = state
@@ -46,8 +45,6 @@ pub async fn fetch_from_itunes(song_id: u32, state: AppState) -> Result<()> {
         .send()
         .await
         .wrap_err("Failed to fetch song data");
-
-    dbg!(&itunes_result);
 
     match itunes_result {
         Ok(response) => {
@@ -66,24 +63,27 @@ pub async fn fetch_from_itunes(song_id: u32, state: AppState) -> Result<()> {
                 state
                     .db
                     .collection::<Song>("songs")
-                    .find_one_and_update(doc! { "track_id": song_id }, doc! {
-                        "$set": Into::<Document>::into(Song {
-                            track_id: data.trackId,
-                            artist_id: data.artistId,
-                            artist_name: data.artistName,
-                            collection_id: data.collectionId,
-                            collection_name: data.collectionName,
-                            artwork_url_30: data.artworkUrl30,
-                            artwork_url_60: data.artworkUrl60,
-                            artwork_url_100: data.artworkUrl100,
-                            realese_date: data.releaseDate,
-                            track_explicitness: data.trackExplicitness == *"explicit",
-                            track_time_millis: data.trackTimeMillis,
-                            preview_url: data.previewUrl,
-                            primary_genre_name: data.primaryGenreName,
-                            track_name: data.trackName,
-                        })
-                    })
+                    .find_one_and_update(
+                        doc! { "track_id": song_id },
+                        doc! {
+                            "$set": Into::<Document>::into(Song {
+                                track_id: data.trackId,
+                                artist_id: data.artistId,
+                                artist_name: data.artistName,
+                                collection_id: data.collectionId,
+                                collection_name: data.collectionName,
+                                artwork_url_30: data.artworkUrl30,
+                                artwork_url_60: data.artworkUrl60,
+                                artwork_url_100: data.artworkUrl100,
+                                realese_date: data.releaseDate,
+                                track_explicitness: data.trackExplicitness == *"explicit",
+                                track_time_millis: data.trackTimeMillis,
+                                preview_url: data.previewUrl,
+                                primary_genre_name: data.primaryGenreName,
+                                track_name: data.trackName,
+                            })
+                        },
+                    )
                     .upsert(true)
                     .await
                     .wrap_err("Failed to update song in database")?;
@@ -105,9 +105,7 @@ pub async fn check_song(song_id: u32, state: AppState) -> Result<()> {
         .collection::<Song>("songs")
         .find_one(doc! { "track_id": song_id })
         .await
-        .wrap_err("Failed to find song in database")?;
-
-    dbg!(&song);
+        .wrap_err("Failed when fetching from database")?;
 
     if song.is_some() {
         Ok(())

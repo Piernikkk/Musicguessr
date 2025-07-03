@@ -3,7 +3,7 @@ use socketioxide::{
     SocketIo,
     extract::{Data, SocketRef, State},
 };
-use time::{Date, UtcDateTime};
+use time::UtcDateTime;
 
 use tracing::{info, warn};
 

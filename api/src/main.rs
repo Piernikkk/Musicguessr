@@ -1,15 +1,15 @@
+mod checks;
 mod error;
 mod models;
 mod paths;
 mod socket;
 mod state;
-mod checks;
 
 use std::{collections::HashMap, sync::Arc};
 
 use axum::Router;
 use color_eyre::eyre::Context;
-use mongodb::{Client, Database};
+use mongodb::{Client, Database, bson::doc};
 use paths::{
     game,
     health::{self},
@@ -29,7 +29,7 @@ use utoipa_redoc::{Redoc, Servable as _};
 use utoipa_scalar::{Scalar, Servable as _};
 use utoipa_swagger_ui::SwaggerUi;
 
-use crate::{ state::AppState};
+use crate::state::AppState;
 
 #[derive(OpenApi)]
 #[openapi()]
@@ -112,6 +112,8 @@ async fn init_mongodb() -> color_eyre::Result<Database> {
     let client = Client::with_uri_str(uri).await?;
 
     let db = client.database("musicguessr");
+
+    db.run_command(doc! { "ping": 1 }).await?;
 
     Ok(db)
 }
