@@ -115,6 +115,8 @@ async fn init_mongodb() -> color_eyre::Result<Database> {
 
     db.run_command(doc! { "ping": 1 }).await?;
 
+    info!("Succesully connected to mongo");
+
     Ok(db)
 }
 

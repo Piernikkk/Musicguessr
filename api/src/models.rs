@@ -2,11 +2,28 @@ use mongodb::bson::{self, Document};
 use serde::{Deserialize, Serialize};
 use time::UtcDateTime;
 
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct UserSafe {
+    pub id: String,
+    pub name: String,
+    pub song_selected: bool,
+}
+
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct User {
     pub id: String,
     pub name: String,
     pub song_id: Option<u32>,
+}
+
+impl User {
+    pub fn to_safe(&self) -> UserSafe {
+        UserSafe {
+            id: self.id.clone(),
+            name: self.name.clone(),
+            song_selected: self.song_id.is_some(),
+        }
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

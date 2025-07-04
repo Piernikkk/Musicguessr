@@ -1,5 +1,5 @@
 use crate::{
-    models::{Message, User},
+    models::{Message, User, UserSafe},
     state::AppState,
 };
 use serde::{Deserialize, Serialize};
@@ -19,7 +19,7 @@ pub struct JoinData {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct GameUpdate {
     id: u32,
-    users: Vec<User>,
+    users: Vec<UserSafe>,
     messages: Vec<Message>,
 }
 
@@ -45,7 +45,7 @@ pub async fn room_join_handler(
             let user = User {
                 id: s.id.to_string(),
                 name: data.username,
-                song_id: None, 
+                song_id: None,
             };
 
             room.users.push(user.clone());
@@ -60,7 +60,7 @@ pub async fn room_join_handler(
             // let room_clone = room.clone();
             let room_update = GameUpdate {
                 id: data.code,
-                users: room.users.clone(),
+                users: room.users.iter().map(|user| user.to_safe()).collect(),
                 messages: room.messages.clone(),
             };
             drop(rooms);
@@ -74,7 +74,10 @@ pub async fn room_join_handler(
         None => {
             drop(rooms);
             let _ = s.emit("error", &format!("{} is not a valid room code", data.code));
-            let _ = s.emit("wrong_room", &format!("{} is not a valid room code", data.code));
+            let _ = s.emit(
+                "wrong_room",
+                &format!("{} is not a valid room code", data.code),
+            );
             warn!("Attempted to join invalid room code: {}", data.code);
         }
     }
