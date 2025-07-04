@@ -40,6 +40,14 @@ pub async fn room_join_handler(
                 return;
             }
 
+            let mut players = state.players.lock().await;
+            if players.contains_key(&s.id.to_string()) {
+                let _ = s.emit("error", "You are already in a room");
+                return;
+            };
+
+            players.insert(s.id.to_string(), data.code);
+
             s.join(data.code.to_string());
 
             let user = User {
@@ -49,13 +57,6 @@ pub async fn room_join_handler(
             };
 
             room.users.push(user.clone());
-
-            state
-                .players
-                .lock()
-                .await
-                .insert(s.id.to_string(), data.code);
-            //
 
             // let room_clone = room.clone();
             let room_update = GameUpdate {
@@ -70,6 +71,7 @@ pub async fn room_join_handler(
                 .emit("joined", &room_update)
                 .await;
             info!("User {} joined room {}", user.id, data.code);
+            dbg!(s.rooms());
         }
         None => {
             drop(rooms);
