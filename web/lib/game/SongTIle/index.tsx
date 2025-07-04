@@ -3,6 +3,7 @@ import { rightSection, songDescription, songDetailsContainer, songTileContainer 
 import Text from '@/lib/components/Text';
 import SongPlayer from '../lobby/SongPlayer';
 import { MouseEvent } from 'react';
+import { css } from '@/styled-system/css';
 
 interface SongTileProps {
     size: 'sm' | 'lg';
@@ -16,10 +17,16 @@ export default function SongTile({ song, onClick }: SongTileProps) {
             <div className={songDetailsContainer}>
                 <SongPlayer artwork={song.artworkUrl60} preview={song.previewUrl} />
                 <div className={songDescription}>
-                    <Text size="sm" weight={600}>
+                    <Text size="sm" lineClamp={1} weight={600} className={css({ width: '100%' })}>
                         {song.trackName}
                     </Text>
-                    <Text size="xs" weight={400} color={2}>
+                    <Text
+                        size="xs"
+                        weight={400}
+                        color={2}
+                        lineClamp={1}
+                        className={css({ width: '100%' })}
+                    >
                         {song.artistName} • {new Date(song.releaseDate).getFullYear()}
                     </Text>
                 </div>

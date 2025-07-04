@@ -28,10 +28,10 @@ export default function SongIndicator() {
                     <div className={songDetailsContainer}>
                         <SongPlayer artwork={song.artworkUrl60} preview={song.previewUrl} />
                         <div className={songDescription}>
-                            <Text size="sm" weight={600}>
+                            <Text size="sm" weight={600} lineClamp={1}>
                                 {song.trackName}
                             </Text>
-                            <Text size="xs" weight={400} color={2}>
+                            <Text size="xs" weight={400} color={2} lineClamp={1}>
                                 {song.artistName} • {new Date(song.releaseDate).getFullYear()}
                             </Text>
                         </div>

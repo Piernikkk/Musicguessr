@@ -7,11 +7,12 @@ import { useEffect, useRef, useState } from 'react';
 import SongTile from '@/lib/game/SongTIle';
 import { TSong } from '@/types/song';
 import { useAudio } from '@/lib/hooks/useAudio';
-import { useSetAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { songAtom } from '@/lib/atoms/song';
 import { $itunes } from '@/lib/providers/itunes';
 import Text from '@/lib/components/Text';
 import { useSocket } from '@/lib/hooks/useSocket';
+import { songSelectorAtom, TSongSelectorAtom } from '@/lib/atoms/songSelector';
 
 export function SongSelectorModal({
     onClose,
@@ -29,9 +30,10 @@ export function SongSelectorModal({
         ref.current?.focus();
     }, []);
 
-    const [results, setResults] = useState<TSong[]>([]);
+    // const [results, setResults] = useState<TSong[]>([]);
+    const [songSelectorContext, setSongSelectorContext] = useAtom(songSelectorAtom);
 
-    const [serchValue, setSearchValue] = useState('');
+    // const [serchValue, setSearchValue] = useState('');
 
     const itunes = $itunes.useMutation('get', '/search');
 
@@ -75,17 +77,21 @@ export function SongSelectorModal({
 
                 if (res) {
                     audio.pause();
-                    setResults(res.results);
+                    // setResults(res.results);
+                    setSongSelectorContext((prev) => ({
+                        ...(prev as TSongSelectorAtom),
+                        results: res.results,
+                    }));
                     setLoading(false);
                 }
             }
-            if (serchValue.length > 0) {
+            if (songSelectorContext?.searchValue && songSelectorContext.searchValue.length > 0) {
                 if (timeoutId) {
                     clearTimeout(timeoutId);
                     setTimeoutId(null);
                 }
                 const id = setTimeout(async () => {
-                    await search(serchValue);
+                    await search(songSelectorContext.searchValue);
                 }, 1000);
                 setTimeoutId(id);
                 setLoading(true);
@@ -95,7 +101,7 @@ export function SongSelectorModal({
                 };
             }
         })();
-    }, [serchValue]);
+    }, [songSelectorContext?.searchValue]);
 
     return (
         <ModalBase
@@ -115,15 +121,23 @@ export function SongSelectorModal({
                     placeholder="Search a song"
                     width={'100%'}
                     icon={IconSearch}
-                    onChange={(e) => setSearchValue(e.target.value)}
+                    // onChange={(e) => setSearchValue(e.target.value)}
+                    onChange={(e) =>
+                        setSongSelectorContext((prev) => ({
+                            ...(prev as TSongSelectorAtom),
+                            searchValue: e.target.value,
+                        }))
+                    }
                 />
                 <div className={songsTiles}>
-                    {loading && results.length == 0 ? (
+                    {loading &&
+                    songSelectorContext?.results &&
+                    songSelectorContext.results.length == 0 ? (
                         <div className={loadingIndicator}>
                             <Text color={2}>Loading</Text>
                         </div>
-                    ) : results.length > 0 ? (
-                        results.map((song) => (
+                    ) : songSelectorContext?.results && songSelectorContext.results.length > 0 ? (
+                        songSelectorContext.results.map((song) => (
                             <SongTile
                                 key={song.trackId}
                                 song={song as TSong}

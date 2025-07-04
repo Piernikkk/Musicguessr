@@ -6,6 +6,23 @@ import { useLocalStorage } from 'react-use';
 import { UserState } from '@/types/user';
 import { useRouter } from 'next/navigation';
 
+type songSelectedResponse = {
+    user_id: string;
+    username: string;
+    song_selected: boolean;
+};
+
+// type UserUpdate = {
+//     id: string;
+//     name: string;
+//     song_selected?: boolean;
+// };
+
+// type TGameUpdate = {
+//     id: number;
+//     users: User[];
+// };
+
 export default function GameProvider({
     children,
     gameId,
@@ -25,6 +42,20 @@ export default function GameProvider({
         //     console.log('Connecting to game with ID:', gameId);
         //     socket.emit('join', { code: gameId, username: 'Placeholder' });
         // }
+
+        socket.on('song_selected', (data: songSelectedResponse) => {
+            console.log('Song selected by user:', data);
+            setGame((prev) => {
+                if (!prev) return prev;
+                const updatedUsers = prev.users?.map((user) => {
+                    if (user.id === data.user_id) {
+                        return { ...user, song_selected: true };
+                    }
+                    return user;
+                });
+                return { ...prev, users: updatedUsers };
+            });
+        });
 
         socket.on('connect', () => {
             console.log('Connecting to game with ID:', gameId);
@@ -60,6 +91,7 @@ export default function GameProvider({
             socket.off('joined');
             socket.off('connect');
             socket.off('disconnected');
+            socket.off('song_selected');
         };
     }, [socket, gameId, game?.id, setGame]);
 

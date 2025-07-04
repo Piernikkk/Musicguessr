@@ -1,10 +1,11 @@
-import { atom } from "jotai";
+import { atom } from 'jotai';
 
 export const gameAtom = atom<TGame>();
 
 export interface User {
     id: string;
     name: string;
+    song_selected?: boolean;
 }
 
 export interface TMessage {
@@ -18,4 +19,4 @@ export interface TGame {
     id: number;
     users?: User[];
     messages?: TMessage[];
-};
+}
