@@ -4,7 +4,7 @@ use socketioxide::{
     extract::{Data, SocketRef, State},
 };
 
-use crate::{checks::song_check::check_song, models::Song, state::AppState};
+use crate::{checks::song_check::check_song, state::AppState};
 
 use tracing::{error, info, warn};
 
@@ -60,14 +60,11 @@ pub async fn song_select(
 
                 let _ = io
                     .to(s.rooms())
-                    .emit(
-                        "song_selected",
-                        &SongSelectResponse {
-                            user_id: s.id.to_string(),
-                            username: user.name.clone(),
-                            song_id: data.id,
-                        },
-                    )
+                    .emit("song_selected", &SongSelectResponse {
+                        user_id: s.id.to_string(),
+                        username: user.name.clone(),
+                        song_id: data.id,
+                    })
                     .await;
             } else {
                 error!("User not found in room for song selection");

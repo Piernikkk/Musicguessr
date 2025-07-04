@@ -54,6 +54,7 @@ pub async fn room_join_handler(
                 id: s.id.to_string(),
                 name: data.username,
                 song_id: None,
+                is_game_master: room.users.is_empty(),
             };
 
             room.users.push(user.clone());
@@ -71,7 +72,6 @@ pub async fn room_join_handler(
                 .emit("joined", &room_update)
                 .await;
             info!("User {} joined room {}", user.id, data.code);
-            dbg!(s.rooms());
         }
         None => {
             drop(rooms);

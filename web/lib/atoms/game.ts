@@ -6,6 +6,7 @@ export interface User {
     id: string;
     name: string;
     song_selected?: boolean;
+    is_game_master?: boolean;
 }
 
 export interface TMessage {

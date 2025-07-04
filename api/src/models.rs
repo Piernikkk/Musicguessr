@@ -7,6 +7,7 @@ pub struct UserSafe {
     pub id: String,
     pub name: String,
     pub song_selected: bool,
+    pub is_game_master: bool,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -14,6 +15,7 @@ pub struct User {
     pub id: String,
     pub name: String,
     pub song_id: Option<u32>,
+    pub is_game_master: bool,
 }
 
 impl User {
@@ -22,6 +24,7 @@ impl User {
             id: self.id.clone(),
             name: self.name.clone(),
             song_selected: self.song_id.is_some(),
+            is_game_master: self.is_game_master,
         }
     }
 }
@@ -38,6 +41,8 @@ pub struct Message {
 pub struct Room {
     pub users: Vec<User>,
     pub messages: Vec<Message>,
+    pub game_started: bool,
+    pub current_song: Option<Song>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, Default)]

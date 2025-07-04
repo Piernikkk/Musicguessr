@@ -38,13 +38,12 @@ pub async fn create_game_room(
         random = rand::random();
     }
 
-    state.rooms.lock().await.insert(
-        random,
-        Room {
-            users: vec![],
-            messages: vec![],
-        },
-    );
+    state.rooms.lock().await.insert(random, Room {
+        users: vec![],
+        messages: vec![],
+        game_started: false,
+        current_song: None,
+    });
 
     dbg!(state.rooms.lock().await.len());
 

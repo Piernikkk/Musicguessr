@@ -57,19 +57,6 @@ export default function GameProvider({
             });
         });
 
-        socket.on('connect', () => {
-            console.log('Connecting to game with ID:', gameId);
-            if (!gameId) {
-                router.push('/');
-                return;
-            }
-            if (!user?.username) {
-                router.push(`/?code=${gameId}`);
-                return;
-            }
-            socket.emit('join', { code: gameId, username: user.username });
-        });
-
         socket.on('wrong_room', () => {
             router.push('/');
         });
@@ -94,6 +81,22 @@ export default function GameProvider({
             socket.off('song_selected');
         };
     }, [socket, gameId, game?.id, setGame]);
+
+    useEffect(() => {
+        if (!socket) return;
+        socket.on('connect', () => {
+            console.log('Connecting to game with ID:', gameId);
+            if (!gameId) {
+                router.push('/');
+                return;
+            }
+            if (!user?.username) {
+                router.push(`/?code=${gameId}`);
+                return;
+            }
+            socket.emit('join', { code: gameId, username: user.username });
+        });
+    }, [socket, gameId, user?.username, router]);
 
     return children;
 }
