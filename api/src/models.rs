@@ -63,8 +63,28 @@ pub struct Song {
     pub primary_genre_name: String,
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize, Default)]
+pub struct GameSong {
+    pub preview_url: String,
+    pub title_length: Vec<bool>,
+    pub artist_length: Vec<bool>,
+}
+
 impl From<Song> for Document {
     fn from(val: Song) -> Self {
         bson::to_document(&val).expect("Failed to convert Song to Document")
+    }
+}
+
+impl Song {
+    pub fn to_game(&self) -> GameSong {
+        let title: Vec<bool> = self.track_name.chars().map(|c| c != ' ').collect();
+        let artist: Vec<bool> = self.artist_name.chars().map(|c| c != ' ').collect();
+
+        GameSong {
+            preview_url: self.preview_url.clone(),
+            title_length: title,
+            artist_length: artist,
+        }
     }
 }

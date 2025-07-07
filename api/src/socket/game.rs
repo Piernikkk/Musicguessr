@@ -1,4 +1,4 @@
-use std::{ops::DerefMut, time::Duration};
+use std::time::Duration;
 
 use mongodb::bson::doc;
 use socketioxide::{
@@ -91,8 +91,6 @@ pub async fn game(s: SocketRef, io: SocketIo, state: AppState) {
     drop(rooms);
 
     for user in users {
-        let _ = io.to(s.rooms()).emit("song", &user.song_id).await;
-
         let song = state
             .db
             .collection::<Song>("songs")
@@ -111,6 +109,7 @@ pub async fn game(s: SocketRef, io: SocketIo, state: AppState) {
         if let Some(room) = room {
             room.current_song = Some(song.clone());
             info!("Current song set for room {}", s.rooms()[0]);
+            let _ = io.to(s.rooms()).emit("song", &song.to_game()).await;
         } else {
             error!("Room not found for user {}", s.id);
             let _ = s.emit("error", "Room not found");
