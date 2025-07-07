@@ -56,57 +56,29 @@ pub async fn message_handler(
             && let Some(check) =
                 check_for_song(data.content.clone(), room.current_song.clone().unwrap())
         {
-            match check {
-                CheckType::Title => {
-                    let _ = io
-                        .to(s.rooms())
-                        .emit(
-                            "guessed",
-                            &GuessedEmit {
-                                user_id: s.id.to_string(),
-                                guess_type: CheckType::Title,
-                            },
-                        )
-                        .await;
-                    return;
-                }
-                CheckType::Artist => {
-                    let _ = io
-                        .to(s.rooms())
-                        .emit(
-                            "guessed",
-                            &GuessedEmit {
-                                user_id: s.id.to_string(),
-                                guess_type: CheckType::Artist,
-                            },
-                        )
-                        .await;
-                    return;
-                }
-                CheckType::CloseTitle => {
-                    let _ = io
-                        .to(s.rooms())
-                        .emit(
-                            "guessed",
-                            &GuessedEmit {
-                                user_id: s.id.to_string(),
-                                guess_type: CheckType::CloseTitle,
-                            },
-                        )
-                        .await;
-                }
-                CheckType::CloseArtist => {
-                    let _ = io
-                        .to(s.rooms())
-                        .emit(
-                            "guessed",
-                            &GuessedEmit {
-                                user_id: s.id.to_string(),
-                                guess_type: CheckType::CloseTitle,
-                            },
-                        )
-                        .await;
-                }
+            if check == CheckType::Title || check == CheckType::Artist {
+                let _ = io
+                    .to(s.rooms())
+                    .emit(
+                        "guessed",
+                        &GuessedEmit {
+                            user_id: s.id.to_string(),
+                            guess_type: check,
+                        },
+                    )
+                    .await;
+                return;
+            } else {
+                let _ = io
+                    .to(s.rooms())
+                    .emit(
+                        "guessed",
+                        &GuessedEmit {
+                            user_id: s.id.to_string(),
+                            guess_type: check,
+                        },
+                    )
+                    .await;
             }
         }
 

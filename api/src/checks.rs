@@ -18,7 +18,7 @@ pub fn check_message(message: String) -> Result<()> {
     Ok(())
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub enum CheckType {
     Title,
     Artist,
