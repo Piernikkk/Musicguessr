@@ -10,7 +10,7 @@ export default function Timer({ duration, time }: TimerProps) {
         <div className={timerContainer}>
             <div
                 className={timerProgress}
-                style={{ width: `${Math.floor((time / duration) * 100)}%` }}
+                style={{ width: `${Math.floor((time / duration) * 100) || 0}%` }}
             />
         </div>
     );

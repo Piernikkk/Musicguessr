@@ -21,11 +21,13 @@ export interface TGame {
     users?: User[];
     messages?: TMessage[];
     is_started?: boolean;
+    current_game_state: 'guess' | 'reveal' | 'summary';
     current_song?: {
         preview_url: string;
         title_length: boolean[];
         artist_length: boolean[];
         title?: string;
         artist?: string;
+        artwork_url?: string;
     };
 }

@@ -1,12 +1,12 @@
 'use client';
-import HintText from '@/lib/game/HintText';
-import { gameContainer, gameTextSection } from './styles';
+import { gameContainer } from './styles';
 import { useAtomValue } from 'jotai';
 import { gameAtom } from '@/lib/atoms/game';
 import Text from '@/lib/components/Text';
-import Timer from '@/lib/game/Timer';
 import { useEffect } from 'react';
 import { useAudio } from '@/lib/hooks/useAudio';
+import GuessingPart from '@/lib/competition/GuessingPart';
+import RevealPart from '@/lib/competition/RevealPart';
 
 export default function GamePage() {
     const game = useAtomValue(gameAtom);
@@ -28,7 +28,7 @@ export default function GamePage() {
         game?.current_song?.title_length,
     ]);
 
-    if (!game?.current_song) {
+    if (!game?.current_game_state) {
         return (
             <div className={gameContainer}>
                 <Text size="xxxl">Loading...</Text>
@@ -38,20 +38,15 @@ export default function GamePage() {
 
     return (
         <div className={gameContainer}>
-            <div className={gameTextSection}>
-                <Text size="md" weight={600}>
-                    Time Left:
-                </Text>
-                <Timer duration={audio.duration || 0} time={audio.time || 0} />
-            </div>
-            <div className={gameTextSection}>
-                <Text weight={600}>Title:</Text>
-                <HintText length={game?.current_song?.title_length || []} />
-            </div>
-            <div className={gameTextSection}>
-                <Text weight={600}>Artist:</Text>
-                <HintText length={game?.current_song?.artist_length || []} />
-            </div>
+            {game.current_game_state == 'guess' && (
+                <GuessingPart
+                    songArtistLength={game.current_song?.artist_length || []}
+                    songDuration={audio.duration}
+                    songTime={audio.time}
+                    songTitleLength={game.current_song?.title_length || []}
+                />
+            )}
+            {game.current_game_state == 'reveal' && <RevealPart />}
         </div>
     );
 }

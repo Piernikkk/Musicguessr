@@ -6,6 +6,7 @@ import { useLocalStorage } from 'react-use';
 import { UserState } from '@/types/user';
 import { useRouter } from 'next/navigation';
 import { songAtom } from '../atoms/song';
+import { TSongResponse } from '@/types/song';
 
 type songSelectedResponse = {
     user_id: string;
@@ -63,7 +64,26 @@ export default function GameProvider({
             console.log('Received song data:', data);
             setGame((prev) => {
                 if (!prev) return prev;
-                return { ...prev, current_song: data };
+                return { ...prev, current_song: data, current_game_state: 'guess' };
+            });
+        });
+
+        socket.on('times_up', (data: TSongResponse) => {
+            setGame((prev) => {
+                if (!prev) return prev;
+                return {
+                    ...prev,
+                    current_song: {
+                        ...(prev.current_song as TGame['current_song']),
+                        artist: data.artist_name,
+                        title: data.track_name,
+                        artwork_url: data.artwork_url_100,
+                        preview_url: prev.current_song?.preview_url ?? '',
+                        title_length: prev.current_song?.title_length ?? [],
+                        artist_length: prev.current_song?.artist_length ?? [],
+                    },
+                    current_game_state: 'reveal',
+                };
             });
         });
 
