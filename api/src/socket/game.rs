@@ -126,6 +126,23 @@ pub async fn game(s: SocketRef, io: SocketIo, state: AppState) {
         tokio::time::sleep(Duration::from_secs(10)).await;
     }
 
+    let mut rooms = state.rooms.lock().await;
+
+    let room = rooms.get_mut(
+        &s.rooms()[0]
+            .parse::<u32>()
+            .expect("Failed to parse room ID as u32"),
+    );
+
+    if let Some(s) = room {
+        s.game_started = false;
+        s.current_song = None;
+    } else {
+        error!("Room not found for user {}", s.id);
+        let _ = s.emit("error", "Room not found");
+        return;
+    }
+
     let _ = io
         .to(s.rooms())
         .emit("game_over", "Game over! Thanks for playing!")
