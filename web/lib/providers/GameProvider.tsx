@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { useSocket } from '../hooks/useSocket';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { TGame, gameAtom } from '../atoms/game';
 import { useLocalStorage } from 'react-use';
 import { UserState } from '@/types/user';
 import { useRouter } from 'next/navigation';
+import { songAtom } from '../atoms/song';
 
 type songSelectedResponse = {
     user_id: string;
@@ -34,6 +35,12 @@ export default function GameProvider({
     const [game, setGame] = useAtom(gameAtom);
     const [user] = useLocalStorage<UserState>('user');
     const router = useRouter();
+    const setSong = useSetAtom(songAtom);
+
+    useEffect(() => {
+        if (!gameId) return;
+        setSong(undefined);
+    }, [gameId, setSong]);
 
     useEffect(() => {
         if (!socket || !gameId) return;
