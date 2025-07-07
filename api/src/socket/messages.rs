@@ -7,11 +7,21 @@ use time::UtcDateTime;
 
 use tracing::{info, warn};
 
-use crate::{models::Message, state::AppState};
+use crate::{
+    checks::{CheckType, check_for_song, check_message},
+    models::Message,
+    state::AppState,
+};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MessageData {
     pub content: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct GuessedEmit {
+    pub user_id: String,
+    pub guess_type: CheckType,
 }
 
 pub async fn message_handler(
@@ -35,6 +45,70 @@ pub async fn message_handler(
             );
             return;
         };
+
+        if let Err(e) = check_message(data.content.clone()) {
+            warn!("{}", e);
+            return;
+        }
+
+        if room.game_started
+            && room.current_song.is_some()
+            && let Some(check) =
+                check_for_song(data.content.clone(), room.current_song.clone().unwrap())
+        {
+            match check {
+                CheckType::Title => {
+                    let _ = io
+                        .to(s.rooms())
+                        .emit(
+                            "guessed",
+                            &GuessedEmit {
+                                user_id: s.id.to_string(),
+                                guess_type: CheckType::Title,
+                            },
+                        )
+                        .await;
+                    return;
+                }
+                CheckType::Artist => {
+                    let _ = io
+                        .to(s.rooms())
+                        .emit(
+                            "guessed",
+                            &GuessedEmit {
+                                user_id: s.id.to_string(),
+                                guess_type: CheckType::Artist,
+                            },
+                        )
+                        .await;
+                    return;
+                }
+                CheckType::CloseTitle => {
+                    let _ = io
+                        .to(s.rooms())
+                        .emit(
+                            "guessed",
+                            &GuessedEmit {
+                                user_id: s.id.to_string(),
+                                guess_type: CheckType::CloseTitle,
+                            },
+                        )
+                        .await;
+                }
+                CheckType::CloseArtist => {
+                    let _ = io
+                        .to(s.rooms())
+                        .emit(
+                            "guessed",
+                            &GuessedEmit {
+                                user_id: s.id.to_string(),
+                                guess_type: CheckType::CloseTitle,
+                            },
+                        )
+                        .await;
+                }
+            }
+        }
 
         let message = Message {
             user_id: s.id.to_string(),

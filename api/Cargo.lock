@@ -69,6 +69,7 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "socketioxide",
+ "strsim",
  "time",
  "tokio",
  "tower",

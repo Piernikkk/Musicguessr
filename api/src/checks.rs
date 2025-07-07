@@ -1,6 +1,8 @@
 use color_eyre::eyre::{Result, eyre};
+use serde::{Deserialize, Serialize};
+use strsim::levenshtein;
 
-use crate::{models::Song, state::AppState};
+use crate::models::Song;
 
 pub mod message_check;
 pub mod song_check;
@@ -16,7 +18,8 @@ pub fn check_message(message: String) -> Result<()> {
     Ok(())
 }
 
-enum CheckType {
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum CheckType {
     Title,
     Artist,
     CloseTitle,
@@ -36,13 +39,12 @@ pub fn check_for_song(message: String, song: Song) -> Option<CheckType> {
         return Some(CheckType::Artist);
     }
 
-    // Simple closeness check: Levenshtein distance <= 2 (requires strsim crate)
-    // if strsim::levenshtein(&message, &song_title) <= 2 {
-    //     return Some(CheckType::CloseTitle);
-    // }
-    // if strsim::levenshtein(&message, &song_artist) <= 2 {
-    //     return Some(CheckType::CloseArtist);
-    // }
+    if levenshtein(&message, &song_title) <= 2 {
+        return Some(CheckType::CloseTitle);
+    }
+    if levenshtein(&message, &song_artist) <= 2 {
+        return Some(CheckType::CloseArtist);
+    }
 
     None
 }
