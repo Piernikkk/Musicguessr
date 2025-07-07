@@ -20,4 +20,12 @@ export interface TGame {
     id: number;
     users?: User[];
     messages?: TMessage[];
+    is_started?: boolean;
+    current_song?: {
+        preview_url: string;
+        title_length: boolean[];
+        artist_length: boolean[];
+        title?: string;
+        artist?: string;
+    };
 }

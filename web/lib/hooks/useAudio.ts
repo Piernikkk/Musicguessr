@@ -1,17 +1,52 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { AudioContext } from '../providers/AudioProvider';
 import { useAtom } from 'jotai';
-import { nowPlayingAtom, NowPlayingState } from '../atoms/nowPlaying';
+import { durationAtom, nowPlayingAtom, NowPlayingState, timeAtom } from '../atoms/nowPlaying';
 
 export function useAudio() {
     const audioRef = useContext(AudioContext);
 
     const [nowPlaying, setNowPlaying] = useAtom(nowPlayingAtom);
 
+    const [time, setTime] = useAtom(timeAtom);
+    const [duration, setDuration] = useAtom(durationAtom);
+
+    useEffect(() => {
+        if (!audioRef?.current) return;
+
+        function onTiemeUpdate() {
+            if (!audioRef?.current) return;
+            setTime(audioRef.current.currentTime);
+        }
+
+        function onDurationChange() {
+            if (!audioRef?.current) return;
+            setDuration(audioRef.current.duration);
+        }
+
+        audioRef.current.addEventListener('timeupdate', onTiemeUpdate);
+        audioRef.current.addEventListener('durationchange', onDurationChange);
+
+        return () => {
+            if (!audioRef?.current) return;
+            audioRef.current.removeEventListener('timeupdate', onTiemeUpdate);
+            audioRef.current.removeEventListener('durationchange', onDurationChange);
+        };
+    }, [audioRef]);
+
     return {
         play: (src: string) => {
             if (!audioRef) {
                 console.error('Audio context is not available');
+                return;
+            }
+
+            if (!src || src === '') {
+                console.error('No audio source provided');
+                return;
+            }
+
+            if (audioRef?.current?.src === src && audioRef?.current?.paused == false) {
                 return;
             }
 
@@ -56,5 +91,7 @@ export function useAudio() {
             }
         },
         nowPlaying: nowPlaying,
+        time: time,
+        duration: duration,
     };
 }

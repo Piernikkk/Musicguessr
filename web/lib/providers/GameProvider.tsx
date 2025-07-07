@@ -32,7 +32,7 @@ export default function GameProvider({
     gameId?: number;
 }) {
     const socket = useSocket();
-    const [game, setGame] = useAtom(gameAtom);
+    const [, setGame] = useAtom(gameAtom);
     const [user] = useLocalStorage<UserState>('user');
     const router = useRouter();
     const setSong = useSetAtom(songAtom);
@@ -43,12 +43,7 @@ export default function GameProvider({
     }, [gameId, setSong]);
 
     useEffect(() => {
-        if (!socket || !gameId) return;
-
-        // if (!game?.id) {
-        //     console.log('Connecting to game with ID:', gameId);
-        //     socket.emit('join', { code: gameId, username: 'Placeholder' });
-        // }
+        if (!socket) return;
 
         socket.on('song_selected', (data: songSelectedResponse) => {
             console.log('Song selected by user:', data);
@@ -61,6 +56,14 @@ export default function GameProvider({
                     return user;
                 });
                 return { ...prev, users: updatedUsers };
+            });
+        });
+
+        socket.on('song', (data: TGame['current_song']) => {
+            console.log('Received song data:', data);
+            setGame((prev) => {
+                if (!prev) return prev;
+                return { ...prev, current_song: data };
             });
         });
 
@@ -87,7 +90,7 @@ export default function GameProvider({
             socket.off('disconnected');
             socket.off('song_selected');
         };
-    }, [socket, gameId, game?.id, setGame]);
+    }, [socket]);
 
     useEffect(() => {
         if (!socket) return;

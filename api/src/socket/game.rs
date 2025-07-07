@@ -53,13 +53,14 @@ pub async fn start_game(s: SocketRef, io: SocketIo, State(state): State<AppState
 
 pub async fn game(s: SocketRef, io: SocketIo, state: AppState) {
     info!("おはよう from thread");
+
+    let room_id = s.rooms()[0]
+        .parse::<u32>()
+        .expect("Failed to parse room ID as u32");
+
     let mut rooms = state.rooms.lock().await;
 
-    let room = rooms.get_mut(
-        &s.rooms()[0]
-            .parse::<u32>()
-            .expect("Failed to parse room ID as u32"),
-    );
+    let room = rooms.get_mut(&room_id);
 
     let users = match room {
         Some(room) => {
@@ -76,7 +77,10 @@ pub async fn game(s: SocketRef, io: SocketIo, state: AppState) {
                 return;
             }
 
-            let _ = io.to(s.rooms()).emit("starting", "Game is starting!").await;
+            let _ = io
+                .to(room_id.to_string())
+                .emit("starting", "Game is starting!")
+                .await;
             room.game_started = true;
 
             usrs
@@ -100,16 +104,15 @@ pub async fn game(s: SocketRef, io: SocketIo, state: AppState) {
             .expect("Failed to find song in database");
 
         let mut rooms = state.rooms.lock().await;
-        let room = rooms.get_mut(
-            &s.rooms()[0]
-                .parse::<u32>()
-                .expect("Failed to parse room ID as u32"),
-        );
+        let room = rooms.get_mut(&room_id);
 
         if let Some(room) = room {
             room.current_song = Some(song.clone());
             info!("Current song set for room {}", s.rooms()[0]);
-            let _ = io.to(s.rooms()).emit("song", &song.to_game()).await;
+            let _ = io
+                .to(room_id.to_string())
+                .emit("song", &song.to_game())
+                .await;
         } else {
             error!("Room not found for user {}", s.id);
             let _ = s.emit("error", "Room not found");
@@ -127,11 +130,7 @@ pub async fn game(s: SocketRef, io: SocketIo, state: AppState) {
 
     let mut rooms = state.rooms.lock().await;
 
-    let room = rooms.get_mut(
-        &s.rooms()[0]
-            .parse::<u32>()
-            .expect("Failed to parse room ID as u32"),
-    );
+    let room = rooms.get_mut(&room_id);
 
     if let Some(s) = room {
         s.game_started = false;
@@ -143,7 +142,7 @@ pub async fn game(s: SocketRef, io: SocketIo, state: AppState) {
     }
 
     let _ = io
-        .to(s.rooms())
+        .to(room_id.to_string())
         .emit("game_over", "Game over! Thanks for playing!")
         .await;
 }

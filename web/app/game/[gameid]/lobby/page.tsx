@@ -7,11 +7,14 @@ import { gameAtom } from '@/lib/atoms/game';
 import SongIndicator from '@/lib/game/lobby/SongIndicator';
 import Button from '@/lib/components/Button';
 import { useSocket } from '@/lib/hooks/useSocket';
+import { useRouter } from 'next/navigation';
 
 export default function Lobby() {
     const game = useAtomValue(gameAtom);
 
     const socket = useSocket();
+
+    const router = useRouter();
 
     return (
         <div className={lobbyContainer}>
@@ -38,6 +41,7 @@ export default function Lobby() {
                         contrast
                         onClick={() => {
                             socket?.emit('start');
+                            router.push(`/game/${game?.id}/game`);
                         }}
                     />
                 )}
