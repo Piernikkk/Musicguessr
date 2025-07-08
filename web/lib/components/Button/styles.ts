@@ -1,4 +1,4 @@
-import { cva } from "@/styled-system/css";
+import { cva } from '@/styled-system/css';
 
 export const buttonContainer = cva({
     base: {
@@ -31,12 +31,19 @@ export const buttonContainer = cva({
                 '&:hover': {
                     backgroundColor: 'contrast.1',
                 },
-            }
+            },
+        },
+        disabled: {
+            true: {
+                opacity: '0.5',
+                cursor: 'not-allowed',
+                pointerEvents: 'none',
+            },
         },
         large: {
             true: {
                 flex: 1,
-            }
-        }
-    }
-})
+            },
+        },
+    },
+});

@@ -49,7 +49,7 @@ export const modalContainer = cva({
     variants: {
         opened: { true: { opacity: 1, transform: 'scale(1)' } },
         width: {
-            500: { width: '500px' },
+            500: { md: { width: '500px' } },
             600: { width: '600px' },
             700: { width: '700px' },
             800: { width: '800px' },
