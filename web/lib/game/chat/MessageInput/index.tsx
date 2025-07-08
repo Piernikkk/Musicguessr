@@ -12,6 +12,7 @@ export default function MessageInput({ onSend, ...props }: MessageInputProps) {
     return (
         <div className={messageInputContainer}>
             <Input
+                maxLength={200}
                 {...props}
                 onKeyDown={getHotkeyHandler([
                     [

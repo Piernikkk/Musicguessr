@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { chatBarContainer, chatBarHeader, messagesWrapper } from './style';
+import { chatBarContainer, chatBarHeader, ChatWrapper, messagesWrapper } from './style';
 import { useSocket } from '@/lib/hooks/useSocket';
 import { useAtom } from 'jotai';
 import { gameAtom, TMessage } from '@/lib/atoms/game';
@@ -48,14 +48,14 @@ export default function ChatBar() {
 
     return (
         <div className={chatBarContainer}>
-            <div className={messagesWrapper}>
-                <div className={chatBarHeader}>
-                    <Text size="xd" weight={600}>
-                        Chat
-                    </Text>
+            <div className={chatBarHeader}>
+                <Text size="xd" weight={600}>
+                    Chat
+                </Text>
 
-                    <Spacer />
-                </div>
+                <Spacer />
+            </div>
+            <div className={messagesWrapper}>
                 {game?.messages?.map((message, index) => (
                     <Message
                         key={index}

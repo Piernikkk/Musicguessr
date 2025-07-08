@@ -3,7 +3,7 @@ import { css } from '@/styled-system/css';
 export const chatBarContainer = css({
     display: 'flex',
     flexDirection: 'column',
-    gap: 1,
+    gap: 3,
     width: '100%',
     height: '100%',
     padding: '15px',
@@ -17,10 +17,11 @@ export const chatBarContainer = css({
     alignItems: 'center',
 });
 
-export const messagesWrapper = css({
+export const ChatWrapper = css({
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
+    flex: 1,
 });
 
 export const chatBarHeader = css({
@@ -30,5 +31,12 @@ export const chatBarHeader = css({
     flexDirection: 'column',
     alignItems: 'center',
     gap: 3,
-    paddingBottom: 2,
-})
+});
+
+export const messagesWrapper = css({
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    overflowY: 'auto',
+    flex: 1,
+});
