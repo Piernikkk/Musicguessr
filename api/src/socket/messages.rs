@@ -9,7 +9,7 @@ use tracing::{info, warn};
 
 use crate::{
     checks::{CheckType, check_for_song, check_message},
-    models::Message,
+    models::{Message, MessageType},
     state::AppState,
 };
 
@@ -51,42 +51,48 @@ pub async fn message_handler(
             return;
         }
 
-        if room.game_started
+        let message = if room.game_started
             && room.current_song.is_some()
             && let Some(check) =
                 check_for_song(data.content.clone(), room.current_song.clone().unwrap())
         {
-            if check == CheckType::Title || check == CheckType::Artist {
-                let _ = io
-                    .to(s.rooms())
-                    .emit(
-                        "guessed",
-                        &GuessedEmit {
-                            user_id: s.id.to_string(),
-                            guess_type: check,
-                        },
-                    )
-                    .await;
-                return;
-            } else {
-                let _ = io
-                    .to(s.rooms())
-                    .emit(
-                        "guessed",
-                        &GuessedEmit {
-                            user_id: s.id.to_string(),
-                            guess_type: check,
-                        },
-                    )
-                    .await;
-            }
-        }
+            let _ = io
+                .to(s.rooms())
+                .emit(
+                    "guessed",
+                    &GuessedEmit {
+                        user_id: s.id.to_string(),
+                        guess_type: check.clone(),
+                    },
+                )
+                .await;
 
-        let message = Message {
-            user_id: s.id.to_string(),
-            username,
-            content: data.content,
-            timestamp: UtcDateTime::now(),
+            let content = match check {
+                CheckType::Title => format!("{} guessed the title!", username.clone()),
+                CheckType::Artist => format!("{} guessed the artist!", username.clone()),
+                CheckType::CloseTitle => {
+                    format!("{} is close to guessing the title!", username.clone())
+                }
+                CheckType::CloseArtist => {
+                    format!("{} is close to guessing the artist!", username.clone())
+                }
+            };
+
+            Message {
+                message_type: MessageType::Guess,
+                user_id: s.id.to_string(),
+                username: username.clone(),
+                content,
+                timestamp: UtcDateTime::now(),
+            }
+        } else {
+            Message {
+                message_type: MessageType::Chat,
+                user_id: s.id.to_string(),
+                username,
+                content: data.content.clone(),
+                timestamp: UtcDateTime::now(),
+            }
         };
 
         let _ = io.to(s.rooms()).emit("message", &message).await;

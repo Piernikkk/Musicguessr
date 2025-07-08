@@ -30,7 +30,15 @@ impl User {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum MessageType {
+    Chat,
+    Guess,
+    System,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Message {
+    pub message_type: MessageType,
     pub user_id: String,
     pub username: String,
     pub content: String,
