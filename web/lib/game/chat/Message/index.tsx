@@ -14,14 +14,15 @@ export default function Message({ username, children, type }: MessageProps) {
     return (
         <div className={messageContainer}>
             {!(type == 'Guess' || type == 'Close') && (
-                <Text size="xxs" weight={600}>
+                <Text size="xxs" weight={600} textWrap>
                     {type == 'Chat' ? username : 'System'}:
                 </Text>
             )}
             <Text
                 size="xxs"
                 color={type == 'Guess' ? 2 : type == 'Close' ? 'close' : undefined}
-                className={css({ textWrap: 'wrap', flex: 1 })}
+                className={css({ flex: 1 })}
+                textWrap
             >
                 {children}
             </Text>

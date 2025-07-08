@@ -73,5 +73,10 @@ export const text = cva({
             center: { textAlign: 'center' },
             right: { textAlign: 'right' },
         },
+        textWrap: {
+            true: {
+                textWrap: 'wrap',
+            },
+        },
     },
 });
