@@ -22,7 +22,7 @@ export const text = cva({
                 fontSize: { base: 10, sm: 12 },
             },
             xs: {
-                fontSize: { base: 12, sm: 14 },
+                fontSize: { base: 12, sm: 14, md: 16, lg: 18 },
             },
             sm: {
                 fontSize: { base: 14, sm: 16, md: 18, lg: 20 },
@@ -37,7 +37,7 @@ export const text = cva({
                 fontSize: { base: 20, sm: 24, md: 26, lg: 28 },
             },
             xl: {
-                fontSize: { base: 24, sm: 30, md: 32 },
+                fontSize: { base: 24, sm: 30, md: 32, lg: 36 },
             },
             xxl: {
                 fontSize: { base: 36, sm: 50, md: 56 },
@@ -66,6 +66,11 @@ export const text = cva({
             3: { color: 'text.2' },
             4: { color: 'text.3' },
             5: { color: 'text.4' },
+        },
+        textAlign: {
+            left: { textAlign: 'left' },
+            center: { textAlign: 'center' },
+            right: { textAlign: 'right' },
         },
     },
 });

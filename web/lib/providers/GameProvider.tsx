@@ -87,6 +87,16 @@ export default function GameProvider({
             });
         });
 
+        socket.on('game_over', () => {
+            setGame((prev) => {
+                if (!prev) return prev;
+                return {
+                    ...prev,
+                    current_game_state: 'summary',
+                };
+            });
+        });
+
         socket.on('wrong_room', () => {
             router.push('/');
         });

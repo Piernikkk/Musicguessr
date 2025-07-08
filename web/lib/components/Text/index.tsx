@@ -15,8 +15,11 @@ export default function Text({
     lineClamp,
     children,
     className,
+    textAlign,
 }: TextProps) {
     return (
-        <div className={cx(text({ size, weight, color, lineClamp }), className)}>{children}</div>
+        <div className={cx(text({ size, weight, color, lineClamp, textAlign }), className)}>
+            {children}
+        </div>
     );
 }
