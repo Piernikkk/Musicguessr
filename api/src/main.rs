@@ -5,8 +5,6 @@ mod paths;
 mod socket;
 mod state;
 
-use std::{collections::HashMap, sync::Arc};
-
 use axum::Router;
 use color_eyre::eyre::Context;
 use mongodb::{Client, Database, bson::doc};
@@ -16,7 +14,7 @@ use paths::{
 };
 use socket::listener::init_io;
 use socketioxide::{SocketIoBuilder, layer::SocketIoLayer};
-use tokio::{net::TcpListener, sync::Mutex};
+use tokio::net::TcpListener;
 use tracing::{info, level_filters::LevelFilter, warn};
 use tracing_error::ErrorLayer;
 use tracing_subscriber::{
@@ -52,8 +50,8 @@ async fn main() -> color_eyre::Result<()> {
     let app_state = AppState {
         http_client,
         db,
-        rooms: Arc::new(Mutex::new(HashMap::new())),
-        players: Arc::new(Mutex::new(HashMap::new())),
+        rooms: Default::default(),
+        players: Default::default(),
     };
 
     let (layer, io) = SocketIoBuilder::new()

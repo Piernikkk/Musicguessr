@@ -40,7 +40,7 @@ pub async fn song_select(
         return;
     };
 
-    let mut rooms = state.rooms.lock().await;
+    let mut rooms = state.rooms.write().await;
 
     let room = rooms.get_mut(
         &s.rooms()[0]
@@ -60,11 +60,14 @@ pub async fn song_select(
 
                 let _ = io
                     .to(s.rooms())
-                    .emit("song_selected", &SongSelectResponse {
-                        user_id: s.id.to_string(),
-                        username: user.name.clone(),
-                        song_id: data.id,
-                    })
+                    .emit(
+                        "song_selected",
+                        &SongSelectResponse {
+                            user_id: s.id.to_string(),
+                            username: user.name.clone(),
+                            song_id: data.id,
+                        },
+                    )
                     .await;
             } else {
                 error!("User not found in room for song selection");

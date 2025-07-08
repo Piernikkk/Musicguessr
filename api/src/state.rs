@@ -1,7 +1,7 @@
 use std::{collections::HashMap, sync::Arc};
 
 use mongodb::Database;
-use tokio::sync::Mutex;
+use tokio::sync::RwLock;
 
 use crate::models::Room;
 
@@ -9,6 +9,6 @@ use crate::models::Room;
 pub struct AppState {
     pub http_client: reqwest::Client,
     pub db: Database,
-    pub rooms: Arc<Mutex<HashMap<u32, Room>>>,
-    pub players: Arc<Mutex<HashMap<String, u32>>>,
+    pub rooms: Arc<RwLock<HashMap<u32, Room>>>,
+    pub players: Arc<RwLock<HashMap<String, u32>>>,
 }

@@ -34,18 +34,19 @@ pub async fn create_game_room(
 ) -> AxumResult<Json<CreateRoomResponse>> {
     let mut random = rand::random_range(0..999999);
 
-    while state.rooms.lock().await.contains_key(&random) {
+    while state.rooms.read().await.contains_key(&random) {
         random = rand::random();
     }
 
-    state.rooms.lock().await.insert(random, Room {
-        users: vec![],
-        messages: vec![],
-        game_started: false,
-        current_song: None,
-    });
-
-    dbg!(state.rooms.lock().await.len());
+    state.rooms.write().await.insert(
+        random,
+        Room {
+            users: vec![],
+            messages: vec![],
+            game_started: false,
+            current_song: None,
+        },
+    );
 
     Ok(Json(CreateRoomResponse { id: random }))
 }

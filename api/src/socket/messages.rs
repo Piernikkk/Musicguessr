@@ -32,7 +32,7 @@ pub async fn message_handler(
 ) {
     info!("User {} sent a message: {}", s.id, data.content);
 
-    let mut rooms = state.rooms.lock().await;
+    let mut rooms = state.rooms.write().await;
     let room = rooms.get_mut(&s.rooms().first().unwrap().parse::<u32>().unwrap());
 
     if let Some(room) = room {

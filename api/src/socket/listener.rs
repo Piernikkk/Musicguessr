@@ -4,7 +4,7 @@ use socketioxide::{SocketIo, extract::SocketRef};
 use crate::socket::{
     game::start_game,
     messages::message_handler,
-    rooms::{room_disconnect, room_join_handler_wrapper},
+    rooms::{room_disconnect, room_join_handler},
     song::song_select,
 };
 
@@ -12,7 +12,7 @@ pub async fn init_io(io: SocketIo) -> Result<()> {
     io.ns("/", |s: SocketRef| {
         dbg!("new connection");
 
-        s.on("join", room_join_handler_wrapper);
+        s.on("join", room_join_handler);
 
         s.on("leave", room_disconnect);
 
