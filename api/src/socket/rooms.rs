@@ -2,13 +2,14 @@ use crate::{
     models::{Message, User, UserSafe},
     state::AppState,
 };
+use color_eyre::eyre::{Result, eyre};
 use serde::{Deserialize, Serialize};
 use socketioxide::{
     SocketIo,
     extract::{Data, SocketRef, State},
 };
 
-use tracing::{info, warn};
+use tracing::{error, info, warn};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct JoinData {
@@ -23,12 +24,28 @@ pub struct GameUpdate {
     messages: Vec<Message>,
 }
 
+pub async fn room_join_handler_wrapper(
+    s: SocketRef,
+    io: SocketIo,
+    data: Data<JoinData>,
+    state: State<AppState>,
+) {
+    let result = room_join_handler(s, io, data, state).await;
+
+    match result {
+        Ok(_) => (),
+        Err(e) => {
+            error!("{:?}", e);
+        }
+    }
+}
+
 pub async fn room_join_handler(
     s: SocketRef,
     io: SocketIo,
     Data(data): Data<JoinData>,
     State(state): State<AppState>,
-) {
+) -> Result<()> {
     let mut rooms = state.rooms.lock().await;
     let room = rooms.get_mut(&data.code);
 
@@ -36,14 +53,13 @@ pub async fn room_join_handler(
         Some(room) => {
             if room.users.iter().any(|user| user.id == s.id.to_string()) {
                 let _ = s.emit("error", "You are already in this room");
-                warn!("User {} is already in this room", s.id);
-                return;
+                return Err(eyre!("User {} is already in this room", s.id));
             }
 
             let mut players = state.players.lock().await;
             if players.contains_key(&s.id.to_string()) {
                 let _ = s.emit("error", "You are already in a room");
-                return;
+                return Err(eyre!("User {} is already in a room", s.id));
             };
 
             players.insert(s.id.to_string(), data.code);
@@ -59,7 +75,6 @@ pub async fn room_join_handler(
 
             room.users.push(user.clone());
 
-            // let room_clone = room.clone();
             let room_update = GameUpdate {
                 id: data.code,
                 users: room.users.iter().map(|user| user.to_safe()).collect(),
@@ -75,7 +90,8 @@ pub async fn room_join_handler(
         }
         None => {
             drop(rooms);
-            let _ = s.emit("error", &format!("{} is not a valid room code", data.code));
+            s.emit("error", &format!("{} is not a valid room code", data.code))
+                .ok();
             let _ = s.emit(
                 "wrong_room",
                 &format!("{} is not a valid room code", data.code),
@@ -83,6 +99,7 @@ pub async fn room_join_handler(
             warn!("Attempted to join invalid room code: {}", data.code);
         }
     }
+    Ok(())
 }
 
 pub async fn room_disconnect(s: SocketRef, _io: SocketIo, State(state): State<AppState>) {
