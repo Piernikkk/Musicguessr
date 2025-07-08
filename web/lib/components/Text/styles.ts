@@ -66,6 +66,7 @@ export const text = cva({
             3: { color: 'text.2' },
             4: { color: 'text.3' },
             5: { color: 'text.4' },
+            close: { color: 'yellow.200/80' },
         },
         textAlign: {
             left: { textAlign: 'left' },

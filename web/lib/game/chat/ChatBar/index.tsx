@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { chatBarContainer, chatBarHeader, ChatWrapper, messagesWrapper } from './style';
+import { chatBarContainer, chatBarHeader, messagesWrapper } from './style';
 import { useSocket } from '@/lib/hooks/useSocket';
 import { useAtom } from 'jotai';
 import { gameAtom, TMessage } from '@/lib/atoms/game';
@@ -59,6 +59,7 @@ export default function ChatBar() {
                 {game?.messages?.map((message, index) => (
                     <Message
                         key={index}
+                        type={message.message_type}
                         timestamp={
                             new Date(
                                 message.timestamp[0],

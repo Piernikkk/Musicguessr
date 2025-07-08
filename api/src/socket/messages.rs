@@ -56,34 +56,36 @@ pub async fn message_handler(
             && let Some(check) =
                 check_for_song(data.content.clone(), room.current_song.clone().unwrap())
         {
-            let _ = io
-                .to(s.rooms())
-                .emit(
-                    "guessed",
-                    &GuessedEmit {
-                        user_id: s.id.to_string(),
-                        guess_type: check.clone(),
-                    },
-                )
-                .await;
+            let _ = s.emit(
+                "guessed",
+                &GuessedEmit {
+                    user_id: s.id.to_string(),
+                    guess_type: check.clone(),
+                },
+            );
 
-            let content = match check {
-                CheckType::Title => format!("{} guessed the title!", username.clone()),
-                CheckType::Artist => format!("{} guessed the artist!", username.clone()),
-                CheckType::CloseTitle => {
-                    format!("{} is close to guessing the title!", username.clone())
-                }
-                CheckType::CloseArtist => {
-                    format!("{} is close to guessing the artist!", username.clone())
-                }
+            let content: Option<String> = match check {
+                CheckType::Title => Some(format!("{} guessed the title!", username.clone())),
+                CheckType::Artist => Some(format!("{} guessed the artist!", username.clone())),
+                _ => None,
             };
 
-            Message {
-                message_type: MessageType::Guess,
-                user_id: s.id.to_string(),
-                username: username.clone(),
-                content,
-                timestamp: UtcDateTime::now(),
+            if let Some(content) = content {
+                Message {
+                    message_type: MessageType::Guess,
+                    user_id: s.id.to_string(),
+                    username: username.clone(),
+                    content,
+                    timestamp: UtcDateTime::now(),
+                }
+            } else {
+                Message {
+                    message_type: MessageType::Chat,
+                    user_id: s.id.to_string(),
+                    username,
+                    content: data.content.clone(),
+                    timestamp: UtcDateTime::now(),
+                }
             }
         } else {
             Message {

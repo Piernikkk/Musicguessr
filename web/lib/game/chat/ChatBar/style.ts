@@ -17,13 +17,6 @@ export const chatBarContainer = css({
     alignItems: 'center',
 });
 
-export const ChatWrapper = css({
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    flex: 1,
-});
-
 export const chatBarHeader = css({
     display: 'flex',
     width: '100%',

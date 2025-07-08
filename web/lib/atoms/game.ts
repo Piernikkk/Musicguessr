@@ -7,9 +7,11 @@ export interface User {
     name: string;
     song_selected?: boolean;
     is_game_master?: boolean;
+    guessed?: boolean;
 }
 
 export interface TMessage {
+    message_type: 'Chat' | 'Guess' | 'Close' | 'System';
     user_id: string;
     username: string;
     content: string;

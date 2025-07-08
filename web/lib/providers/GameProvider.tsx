@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSocket } from '../hooks/useSocket';
 import { useAtom, useSetAtom } from 'jotai';
-import { TGame, gameAtom } from '../atoms/game';
+import { TGame, User, gameAtom } from '../atoms/game';
 import { useLocalStorage } from 'react-use';
 import { UserState } from '@/types/user';
 import { useRouter } from 'next/navigation';
@@ -14,16 +14,10 @@ type songSelectedResponse = {
     song_selected: boolean;
 };
 
-// type UserUpdate = {
-//     id: string;
-//     name: string;
-//     song_selected?: boolean;
-// };
-
-// type TGameUpdate = {
-//     id: number;
-//     users: User[];
-// };
+type GuessedResponse = {
+    user_id: string;
+    guess_type: 'CloseArtist' | 'CloseTitle' | 'Artist' | 'Title';
+};
 
 export default function GameProvider({
     children,
@@ -87,6 +81,40 @@ export default function GameProvider({
             });
         });
 
+        socket.on('guessed', (data: GuessedResponse) => {
+            console.log('User guessed:', data);
+            if (!data.user_id || !data.guess_type) return;
+            if (data.guess_type === 'CloseArtist' || data.guess_type === 'CloseTitle') {
+                let tmp_user: User;
+                setGame((prev) => {
+                    console.log('Game', prev);
+
+                    if (!prev) return prev;
+                    const updatedUsers = prev.users?.map((user) => {
+                        if (user.id === data.user_id) {
+                            tmp_user = user;
+                            return { ...user, guessed: true };
+                        }
+                        return user;
+                    });
+                    const messages = prev.messages;
+                    messages?.push({
+                        message_type: 'Close',
+                        user_id: data.user_id,
+                        username: tmp_user.name,
+                        content: `You are close to guessing the ${data.guess_type === 'CloseArtist' ? 'artist' : 'title'}!`,
+                        timestamp: new Date()
+                            .toISOString()
+                            .split('T')[1]
+                            .split('.')[0]
+                            .split(':')
+                            .map(Number) as [number, number, number, number, number, number],
+                    });
+                    return { ...prev, users: updatedUsers, messages };
+                });
+            }
+        });
+
         socket.on('game_over', () => {
             setGame((prev) => {
                 if (!prev) return prev;
@@ -119,6 +147,11 @@ export default function GameProvider({
             socket.off('connect');
             socket.off('disconnected');
             socket.off('song_selected');
+            socket.off('wrong_room');
+            socket.off('game_over');
+            socket.off('guessed');
+            socket.off('times_up');
+            socket.off('song');
         };
     }, [socket]);
 
