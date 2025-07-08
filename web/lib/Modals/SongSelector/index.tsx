@@ -13,6 +13,7 @@ import { $itunes } from '@/lib/providers/itunes';
 import Text from '@/lib/components/Text';
 import { useSocket } from '@/lib/hooks/useSocket';
 import { songSelectorAtom, TSongSelectorAtom } from '@/lib/atoms/songSelector';
+import { getHotkeyHandler } from '@mantine/hooks';
 
 export function SongSelectorModal({
     onClose,
@@ -56,35 +57,35 @@ export function SongSelectorModal({
 
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
+    async function search(term: string) {
+        const res = await itunes
+            .mutateAsync({
+                params: {
+                    query: {
+                        term,
+                        media: 'music',
+                        entity: 'song',
+                        limit: 40,
+                    },
+                },
+            })
+            .catch((e) => {
+                console.error(e);
+                setLoading(false);
+            });
+
+        if (res) {
+            audio.pause();
+            // setResults(res.results);
+            setSongSelectorContext((prev) => ({
+                ...(prev as TSongSelectorAtom),
+                results: res.results,
+            }));
+            setLoading(false);
+        }
+    }
     useEffect(() => {
         (async () => {
-            async function search(term: string) {
-                const res = await itunes
-                    .mutateAsync({
-                        params: {
-                            query: {
-                                term,
-                                media: 'music',
-                                entity: 'song',
-                                limit: 40,
-                            },
-                        },
-                    })
-                    .catch((e) => {
-                        console.error(e);
-                        setLoading(false);
-                    });
-
-                if (res) {
-                    audio.pause();
-                    // setResults(res.results);
-                    setSongSelectorContext((prev) => ({
-                        ...(prev as TSongSelectorAtom),
-                        results: res.results,
-                    }));
-                    setLoading(false);
-                }
-            }
             if (songSelectorContext?.searchValue && songSelectorContext.searchValue.length > 0) {
                 if (timeoutId) {
                     clearTimeout(timeoutId);
@@ -128,6 +129,20 @@ export function SongSelectorModal({
                             searchValue: e.target.value,
                         }))
                     }
+                    onKeyDown={getHotkeyHandler([
+                        [
+                            'Enter',
+                            (e) => {
+                                e.preventDefault();
+                                if (timeoutId) {
+                                    clearTimeout(timeoutId);
+                                    setTimeoutId(null);
+                                }
+                                if (!songSelectorContext?.searchValue) return;
+                                search(songSelectorContext?.searchValue);
+                            },
+                        ],
+                    ])}
                 />
                 <div className={songsTiles}>
                     {loading &&
