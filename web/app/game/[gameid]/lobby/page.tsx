@@ -9,6 +9,7 @@ import Button from '@/lib/components/Button';
 import { useSocket } from '@/lib/hooks/useSocket';
 import { useRouter } from 'next/navigation';
 import { useModals } from '@/lib/ModalsManager';
+import { useMemo } from 'react';
 
 export default function Lobby() {
     const game = useAtomValue(gameAtom);
@@ -18,6 +19,10 @@ export default function Lobby() {
     const router = useRouter();
 
     const modals = useModals();
+
+    const cantStart = useMemo(() => {
+        return !game?.users?.some((user) => user.song_selected);
+    }, [game]);
 
     return (
         <div className={lobbyContainer}>
@@ -39,25 +44,31 @@ export default function Lobby() {
                     </Text>
                 </Transform>
                 {game?.users?.find((u) => u.id == socket?.id)?.is_game_master && (
-                    <Button
-                        label="Start Game"
-                        contrast
-                        disabled={!game?.users?.some((user) => user.song_selected)}
-                        onClick={async () => {
-                            if (game?.users?.some((user) => !user.song_selected)) {
-                                const confirm = await modals.show('Confirm', {
-                                    title: 'Start Game',
-                                    description:
-                                        'Not all the players selected a song. Are you sure you want to start the game?',
-                                    confirmText: 'Yes',
-                                    cancelText: 'No',
-                                });
-                                if (!confirm) return;
-                            }
-                            socket?.emit('start');
-                            router.push(`/game/${game?.id}/game`);
-                        }}
-                    />
+                    <>
+                        <Button
+                            label="Start Game"
+                            contrast
+                            disabled={cantStart}
+                            onClick={async () => {
+                                if (game?.users?.some((user) => !user.song_selected)) {
+                                    const confirm = await modals.show('Confirm', {
+                                        title: 'Start Game',
+                                        description:
+                                            'Not all the players selected a song. Are you sure you want to start the game?',
+                                        confirmText: 'Yes',
+                                        cancelText: 'No',
+                                    });
+                                    if (!confirm) return;
+                                }
+                                socket?.emit('start');
+                                router.push(`/game/${game?.id}/game`);
+                            }}
+                        />
+                        <Text color={3} size="sm">
+                            {cantStart &&
+                                'At least one player must select a song to start the game.'}
+                        </Text>
+                    </>
                 )}
             </div>
             <SongIndicator />

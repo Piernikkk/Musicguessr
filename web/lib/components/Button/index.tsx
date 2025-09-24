@@ -15,6 +15,7 @@ export interface ButtonProps extends HTMLAttributes<HTMLDivElement> {
     width?: number | string;
     disabled?: boolean;
     onClick?: React.MouseEventHandler<HTMLDivElement>;
+    subtext?: string;
 }
 
 export default function Button({
@@ -27,6 +28,7 @@ export default function Button({
     large,
     width,
     disabled,
+    subtext,
     onClick,
     ...props
 }: ButtonProps) {
@@ -39,9 +41,14 @@ export default function Button({
         >
             {Icon && <Icon size={size} color={color} />}
             {label && (
-                <Text weight={weight} size="md" color={contrast ? 5 : undefined}>
-                    {label}
-                </Text>
+                <>
+                    <Text weight={weight} size="md" color={contrast ? 5 : undefined}>
+                        {label}
+                    </Text>
+                    <Text size="sm" weight={300}>
+                        {subtext}
+                    </Text>
+                </>
             )}
         </div>
     );
