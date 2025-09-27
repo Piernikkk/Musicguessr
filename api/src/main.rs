@@ -1,5 +1,6 @@
 mod checks;
 mod error;
+mod game_functions;
 mod models;
 mod paths;
 mod socket;
