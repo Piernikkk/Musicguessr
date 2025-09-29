@@ -16,6 +16,7 @@ pub struct User {
     pub name: String,
     pub song_id: Option<u32>,
     pub is_game_master: bool,
+    pub score: Vec<Song>,
 }
 
 impl User {

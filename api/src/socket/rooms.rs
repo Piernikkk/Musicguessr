@@ -56,6 +56,7 @@ pub async fn room_join_handler(
                     name: data.username,
                     song_id: None,
                     is_game_master: room.users.is_empty(),
+                    score: vec![],
                 };
 
                 room.users.push(user.clone());

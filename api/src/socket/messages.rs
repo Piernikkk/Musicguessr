@@ -9,7 +9,7 @@ use tracing::{info, warn};
 
 use crate::{
     checks::{CheckType, check_for_song, check_message},
-    models::{Message, MessageType},
+    models::{Message, MessageType, User},
     state::AppState,
 };
 
@@ -36,15 +36,18 @@ pub async fn message_handler(
     let room = rooms.get_mut(&s.rooms().first().unwrap().parse::<u32>().unwrap());
 
     if let Some(room) = room {
-        let username = if let Some(user) = room.users.iter().find(|u| u.id == s.id.to_string()) {
-            user.name.clone()
-        } else {
-            warn!(
-                "User {} not found in the room but tried to send a message",
-                s.id
-            );
-            return;
-        };
+        let mut user: &mut User =
+            if let Some(user) = room.users.iter_mut().find(|u| u.id == s.id.to_string()) {
+                user
+            } else {
+                warn!(
+                    "User {} not found in the room but tried to send a message",
+                    s.id
+                );
+                return;
+            };
+
+        let username = user.name.clone();
 
         if let Err(e) = check_message(data.content.clone()) {
             warn!("{}", e);
@@ -66,7 +69,11 @@ pub async fn message_handler(
 
             let content: Option<String> = match check {
                 CheckType::Title => Some(format!("{} guessed the title!", username.clone())),
-                CheckType::Artist => Some(format!("{} guessed the artist!", username.clone())),
+                CheckType::Artist => {
+                    user.score.push(room.current_song.clone().unwrap());
+
+                    Some(format!("{} guessed the artist!", username.clone()))
+                }
                 _ => None,
             };
 
