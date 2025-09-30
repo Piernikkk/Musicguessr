@@ -43,4 +43,6 @@ RUN cp target/$(xx-cargo --print-target-triple)/release/musicguessr-api /app/tar
 
 FROM scratch AS runtime
 COPY --from=builder /app/target/release/musicguessr-api /musicguessr-api
+
+EXPOSE 3002
 ENTRYPOINT ["/musicguessr-api"]
