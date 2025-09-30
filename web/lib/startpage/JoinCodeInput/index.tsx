@@ -5,7 +5,7 @@ import GlowTile from '@/lib/components/GlowTile';
 import Button from '@/lib/components/Button';
 import Text from '@/lib/components/Text';
 import Spacer from '@/lib/components/Spacer';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { $api } from '@/lib/providers/api';
 import { useSocket } from '@/lib/hooks/useSocket';
@@ -14,22 +14,22 @@ import { useSetAtom } from 'jotai';
 import { UserState } from '@/types/user';
 import { useLocalStorage, useStartTyping } from 'react-use';
 
-export default function JoinCodeInput() {
+function JoinCodeInputContent() {
     const [code, setCode] = useState<string>('');
 
     const [value, setValue] = useLocalStorage<UserState>('user');
 
-    const serchParams = useSearchParams();
+    const searchParams = useSearchParams();
 
     useEffect(() => {
-        if (!serchParams) return;
+        if (!searchParams) return;
 
-        const codeParam = serchParams.get('code');
+        const codeParam = searchParams.get('code');
 
         if (!codeParam) return;
 
-        setCode(codeParam);
-    }, []);
+        setCode(codeParam.padStart(6, '0'));
+    }, [searchParams]);
 
     const ref = useRef<HTMLInputElement>(null);
 
@@ -124,5 +124,13 @@ export default function JoinCodeInput() {
                 <Button onClick={handleCreateLobby} label="Create Lobby" width={'100%'} />
             </div>
         </GlowTile>
+    );
+}
+
+export default function JoinCodeInput() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <JoinCodeInputContent />
+        </Suspense>
     );
 }
