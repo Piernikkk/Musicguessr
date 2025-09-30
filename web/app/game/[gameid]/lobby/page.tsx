@@ -7,7 +7,6 @@ import { gameAtom } from '@/lib/atoms/game';
 import SongIndicator from '@/lib/game/lobby/SongIndicator';
 import Button from '@/lib/components/Button';
 import { useSocket } from '@/lib/hooks/useSocket';
-import { useRouter } from 'next/navigation';
 import { useModals } from '@/lib/ModalsManager';
 import { useMemo } from 'react';
 
@@ -15,8 +14,6 @@ export default function Lobby() {
     const game = useAtomValue(gameAtom);
 
     const socket = useSocket();
-
-    const router = useRouter();
 
     const modals = useModals();
 
