@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSocket } from '../hooks/useSocket';
-import { useAtom, useSetAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { TGame, User, gameAtom } from '../atoms/game';
 import { useLocalStorage } from 'react-use';
 import { UserState } from '@/types/user';
@@ -27,7 +27,7 @@ export default function GameProvider({
     gameId?: number;
 }) {
     const socket = useSocket();
-    const [, setGame] = useAtom(gameAtom);
+    const setGame = useSetAtom(gameAtom);
     const [user] = useLocalStorage<UserState>('user');
     const router = useRouter();
     const setSong = useSetAtom(songAtom);
@@ -115,13 +115,20 @@ export default function GameProvider({
             }
         });
 
-        socket.on('game_over', () => {
+        socket.on('game_over', (d: User[]) => {
             setGame((prev) => {
                 if (!prev) return prev;
-                return {
+                const newData = {
                     ...prev,
-                    current_game_state: 'summary',
+                    users: prev.users?.map((user) => ({
+                        ...user,
+                        score: d.find((u) => u.id === user.id)?.score,
+                    })),
+                    current_game_state: 'summary' as 'guess' | 'reveal' | 'summary',
                 };
+                console.log('Game over, final data:', newData);
+
+                return newData;
             });
         });
 
@@ -142,8 +149,14 @@ export default function GameProvider({
                 return { ...prev, users: prev.users?.filter((user) => user.id !== data) };
             });
         });
+
+        socket.on('starting', () => {
+            router.push(`/game/${gameId}/game`);
+        });
+
         return () => {
             socket.off('joined');
+            socket.off('starting');
             socket.off('connect');
             socket.off('disconnected');
             socket.off('song_selected');

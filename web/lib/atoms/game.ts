@@ -8,6 +8,7 @@ export interface User {
     song_selected?: boolean;
     is_game_master?: boolean;
     guessed?: boolean;
+    score?: Map<string, [boolean, boolean]>; // song id -> [title guessed, artist guessed]
 }
 
 export interface TMessage {

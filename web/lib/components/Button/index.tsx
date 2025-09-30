@@ -42,7 +42,12 @@ export default function Button({
             {Icon && <Icon size={size} color={color} />}
             {label && (
                 <>
-                    <Text weight={weight} size="md" color={contrast ? 5 : undefined}>
+                    <Text
+                        textAlign="center"
+                        weight={weight}
+                        size="md"
+                        color={contrast ? 5 : undefined}
+                    >
                         {label}
                     </Text>
                     <Text size="sm" weight={300}>

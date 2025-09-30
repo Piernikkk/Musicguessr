@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::{
     models::{Message, User, UserSafe},
     state::AppState,
@@ -56,7 +58,7 @@ pub async fn room_join_handler(
                     name: data.username,
                     song_id: None,
                     is_game_master: room.users.is_empty(),
-                    score: vec![],
+                    score: HashMap::new(),
                 };
 
                 room.users.push(user.clone());

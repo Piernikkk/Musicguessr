@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use mongodb::bson::{self, Document};
 use serde::{Deserialize, Serialize};
 use time::UtcDateTime;
@@ -16,7 +18,7 @@ pub struct User {
     pub name: String,
     pub song_id: Option<u32>,
     pub is_game_master: bool,
-    pub score: Vec<Song>,
+    pub score: HashMap<u32, (bool, bool)>, // track_id -> (guessed_title, guessed_artist)
 }
 
 impl User {

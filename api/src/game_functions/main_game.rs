@@ -77,6 +77,18 @@ pub async fn game(s: SocketRef, io: SocketIo, state: AppState) {
 
         tokio::time::sleep(Duration::from_secs(30)).await;
 
+        let mut rooms = state.rooms.write().await;
+        let room = rooms.get_mut(&room_id);
+
+        if let Some(room) = room {
+            room.current_song = None;
+            info!("Current song reset for room {}", s.rooms()[0]);
+        } else {
+            error!("Room not found for user {}", s.id);
+            return;
+        }
+        drop(rooms);
+
         let _ = io.to(s.rooms()).emit("times_up", &song).await;
 
         tokio::time::sleep(Duration::from_secs(10)).await;
@@ -89,14 +101,10 @@ pub async fn game(s: SocketRef, io: SocketIo, state: AppState) {
     if let Some(s) = room {
         s.game_started = false;
         s.current_song = None;
+
+        let _ = io.to(room_id.to_string()).emit("game_over", &s.users).await;
     } else {
         error!("Room not found for user {}", s.id);
         let _ = s.emit("error", "Room not found");
-        return;
     }
-
-    let _ = io
-        .to(room_id.to_string())
-        .emit("game_over", "Game over! Thanks for playing!")
-        .await;
 }

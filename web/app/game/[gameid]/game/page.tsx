@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { useAudio } from '@/lib/hooks/useAudio';
 import GuessingPart from '@/lib/competition/GuessingPart';
 import RevealPart from '@/lib/competition/RevealPart';
+import GameSummary from '@/lib/competition/GameSummmary';
 
 export default function GamePage() {
     const game = useAtomValue(gameAtom);
@@ -47,6 +48,7 @@ export default function GamePage() {
                 />
             )}
             {game.current_game_state == 'reveal' && <RevealPart />}
+            {game.current_game_state == 'summary' && <GameSummary />}
         </div>
     );
 }

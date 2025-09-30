@@ -61,7 +61,7 @@ export default function Lobby() {
                                     if (!confirm) return;
                                 }
                                 socket?.emit('start');
-                                router.push(`/game/${game?.id}/game`);
+                                // router.push(`/game/${game?.id}/game`);
                             }}
                         />
                         <Text color={3} size="sm">

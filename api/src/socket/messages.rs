@@ -36,7 +36,7 @@ pub async fn message_handler(
     let room = rooms.get_mut(&s.rooms().first().unwrap().parse::<u32>().unwrap());
 
     if let Some(room) = room {
-        let mut user: &mut User =
+        let user: &mut User =
             if let Some(user) = room.users.iter_mut().find(|u| u.id == s.id.to_string()) {
                 user
             } else {
@@ -68,9 +68,19 @@ pub async fn message_handler(
             );
 
             let content: Option<String> = match check {
-                CheckType::Title => Some(format!("{} guessed the title!", username.clone())),
+                CheckType::Title => {
+                    user.score
+                        .entry(room.current_song.as_ref().unwrap().track_id)
+                        .or_insert((false, false))
+                        .0 = true;
+
+                    Some(format!("{} guessed the title!", username.clone()))
+                }
                 CheckType::Artist => {
-                    user.score.push(room.current_song.clone().unwrap());
+                    user.score
+                        .entry(room.current_song.as_ref().unwrap().track_id)
+                        .or_insert((false, false))
+                        .1 = true;
 
                     Some(format!("{} guessed the artist!", username.clone()))
                 }
