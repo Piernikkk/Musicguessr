@@ -1,0 +1,46 @@
+services:
+  web:
+    labels:
+      traefik.enable: true
+      traefik.port: 3000
+      traefik.http.services.musicguessr-web.loadbalancer.server.port: "3000"
+      traefik.http.routers.musicguessr-web.rule: "Host(`musicguessr.piernik.rocks`)"
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    networks:
+      - default
+      - proxy
+    restart: unless-stopped
+  api:
+    platform: linux/amd64
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+      args:
+        PROJECT_NAME: musicguessr_api
+    env_file: api/.env
+    restart: unless-stopped
+    labels:
+      traefik.enable: true
+      traefik.port: 3002
+      traefik.http.routers.musicguessr-api.rule: "Host(`musicguessr.piernik.rocks`) && (PathPrefix(`/api`) || PathPrefix(`/socket.io`) || PathPrefix(`/apidoc`))"
+      traefik.http.services.musicguessr-api.loadbalancer.server.port: 3002
+    networks:
+      - default
+      - proxy
+  mongodb:
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    volumes:
+      - type: bind
+        source: ./db
+        target: /data/db
+    ports:
+      - :27017
+    restart: always
+    user: 1000:1000
+networks:
+  proxy:
+    name: proxy-network
+    external: true
+  default:

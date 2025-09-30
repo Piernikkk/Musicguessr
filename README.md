@@ -29,17 +29,23 @@ Guess your friends' favorite music — together!
 
 ### Commands:
 
+**web**
+
 ```bash
-# web
 cd web/
 pnpm i
 pnpm dev
+```
 
-# api
-cd ../api/
+**api**
+
+```bash
+cd api/
 cargo run
+```
 
-# mixing api and web together on one port
-cd ../
+**caddy** - mixing api and web together on one port
+
+```bash
 caddy run
 ```

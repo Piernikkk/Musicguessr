@@ -55,37 +55,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "api"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "axum",
- "color-eyre",
- "dotenvy",
- "mongodb",
- "rand 0.9.1",
- "reqwest",
- "serde",
- "serde_json",
- "serde_yaml",
- "socketioxide",
- "strsim",
- "time",
- "tokio",
- "tower",
- "tower-http",
- "tracing",
- "tracing-error",
- "tracing-subscriber",
- "utoipa",
- "utoipa-axum",
- "utoipa-rapidoc",
- "utoipa-redoc",
- "utoipa-scalar",
- "utoipa-swagger-ui",
-]
-
-[[package]]
 name = "arbitrary"
 version = "1.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1430,6 +1399,37 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.101",
+]
+
+[[package]]
+name = "musicguessr-api"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "axum",
+ "color-eyre",
+ "dotenvy",
+ "mongodb",
+ "rand 0.9.1",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "socketioxide",
+ "strsim",
+ "time",
+ "tokio",
+ "tower",
+ "tower-http",
+ "tracing",
+ "tracing-error",
+ "tracing-subscriber",
+ "utoipa",
+ "utoipa-axum",
+ "utoipa-rapidoc",
+ "utoipa-redoc",
+ "utoipa-scalar",
+ "utoipa-swagger-ui",
 ]
 
 [[package]]
