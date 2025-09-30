@@ -41,6 +41,7 @@ pnpm dev
 
 ```bash
 cd api/
+echo "MONGODB_URI=mongodb://localhost:27017" > .env
 cargo run
 ```
 

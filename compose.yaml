@@ -19,6 +19,7 @@ services:
       dockerfile: Dockerfile
       args:
         PROJECT_NAME: musicguessr_api
+        BUILDPLATFORM: linux/amd64
     env_file: api/.env
     restart: unless-stopped
     labels:
