@@ -20,7 +20,8 @@ services:
       args:
         PROJECT_NAME: musicguessr_api
         BUILDPLATFORM: linux/amd64
-    env_file: api/.env
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017
     restart: unless-stopped
     labels:
       traefik.enable: true
@@ -31,15 +32,17 @@ services:
       - default
       - proxy
   mongodb:
-    image: mongodb/mongodb-community-server:6.0-ubi8
+    image: mongodb/mongodb-community-server:7.0-ubi8
     volumes:
       - type: bind
         source: ./db
         target: /data/db
     ports:
       - :27017
-    restart: always
+    restart: unless-stopped
     user: 1000:1000
+    networks:
+      - default
 networks:
   proxy:
     name: proxy-network

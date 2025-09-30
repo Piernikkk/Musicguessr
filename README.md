@@ -19,6 +19,25 @@ Guess your friends' favorite music — together!
     <img src="./images/game.png" alt="home screen"/>
     <img src="./images/reveal.png" alt="home screen"/>
 
+## Host it yourself:
+
+You can host it by yourself with docker!
+
+_If you want to use something different than traefik, you need to adjust compose file for your needs._
+
+### Dependencies:
+
+-   [docker](https://docs.docker.com/engine/install/)
+-   [traefik](https://doc.traefik.io/traefik/getting-started/install-traefik/)
+
+### Run:
+
+```bash
+# You need to create an empty folder for mongodb data, because mongo won't do it itself
+mkdir db
+docker-compose up -d
+```
+
 ## Development:
 
 ### Dependencies:
@@ -26,8 +45,9 @@ Guess your friends' favorite music — together!
 -   [pnpm](https://pnpm.io/installation)
 -   [rust/cargo](https://rust-lang.org/tools/install/)
 -   [caddy](https://caddyserver.com/)
+-   [mongodb](https://www.mongodb.com/docs/manual/installation/)
 
-### Commands:
+### Run:
 
 **web**
 
